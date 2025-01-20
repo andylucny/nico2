@@ -169,3 +169,17 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# NICO files
+mesh
+nico_humanoid_upper_rh7d_ukba.json
+nico_upper_ukba.urdf
+v4l2-ctl.exe
+
+# models
+face
+
+# data files
+*.jpg
+*.png
+*.tif
