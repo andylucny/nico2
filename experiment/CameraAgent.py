@@ -130,7 +130,10 @@ if __name__ == "__main__":
 
     camera_agent = CameraAgent('See3CAM_CU135', 0, 'bgr', fps=30, zoom=350)
     time.sleep(1)
-    camera_agent2 = CameraAgent('See3CAM_CU135', 1, 'wide', fps=10, zoom=170)
+    #camera_agent2 = CameraAgent('See3CAM_CU135', 1, 'wide', fps=10, zoom=170)
+    camera_agent2 = CameraAgent('Brio 500', 0, 'wide', fps=30)
+    #camera_agent2 = CameraAgent('HD User Facing', 0, 'wide', fps=30)
+    
     time.sleep(1)
 
     class ViewerAgent(Agent):

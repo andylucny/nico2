@@ -27,7 +27,7 @@ from GuiAgent import GuiAgent
 
 TouchAgent() # writes 'touch', 'stop', 'experiment', 'touchImage' reads 'emulated'
 time.sleep(1)
-CameraAgent('HD Pro Webcam C920',1,'humanImage',fps=10)
+CameraAgent('Brio 500', 0,',1,'humanImage',fps=10)
 time.sleep(1)
 CameraAgent('HD Pro Webcam C920',0,'robotImage',fps=10)
 time.sleep(1)
