@@ -2,6 +2,11 @@ import pyttsx3
 from agentspace import space
 
 en_dictionary = {
+    "@introduction" : "Hello, welcome to the legibility experiment!",
+    "@calibration" : "For calibration look at the red point in the middle and corners of the screen. Then touch the touchscreen.",
+    "@touch-please" : "Guess the point where robot points and touch it on the screen.",
+    "@thank-you" : "Thank you.",
+    "@done" : "Done.",
 }
 
 sk_dictionary = {

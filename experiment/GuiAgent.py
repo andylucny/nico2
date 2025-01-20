@@ -27,8 +27,8 @@ class GuiAgent(Agent):
                 sg.Radio("SK", "Language:", False, size=(2, 1), key="Language-SK", enable_events=True), 
             ],
             [ 
-                sg.Checkbox("Follow face and smile", default=True, key='BodyLanguage', enable_events=True),
-                sg.Checkbox("Tell instructions", default=True, key='TellIstructions', enable_events=True),
+                sg.Checkbox("Follow face and smile", default=False, key='BodyLanguage', enable_events=True),
+                sg.Checkbox("Tell instructions", default=False, key='TellIstructions', enable_events=True),
                 sg.Text("Head:", size=(5, 1)), 
                 sg.Radio("congruent", "Head:", True, size=(8, 1), key="Head-congruent", enable_events=True), 
                 sg.Radio("incongruent", "Head:", False, size=(8, 1), key="Head-incongruent", enable_events=True), 
@@ -68,7 +68,12 @@ class GuiAgent(Agent):
             elif event == "Language-SK":
                 space["language"] = "sk"
             elif event == "BodyLanguage":
-                space["BodyLanguage"] = values["BodyLanguage"]
+                bodylang = values["BodyLanguage"]
+                space["BodyLanguage"] = bodylang
+                if not bodylang:
+                    space["dontLook"] = True
+                else:
+                    space["dontLook"] = None
             elif event == "TellIstructions":
                 space["TellIstructions"] = values["TellIstructions"]
             elif event.startswith("StopMode-"):
@@ -76,7 +81,11 @@ class GuiAgent(Agent):
                 percentage = int(option)
                 space["StopMode"] = percentage
             elif event.startswith("Head-"):
-                space["head"] = event[len("Head-"):]
+                try:
+                    space["head"] = ["unknown","congruent","incongruent","only"].index(event[len("Head-"):])
+                except:
+                    print("unknown head mode !!!")
+                    space["head"] = 1 # congruent
             elif event == "Run batch":
                 space["experiment"] = 2
             elif event == "Run":
@@ -134,7 +143,6 @@ if __name__ == "__main__":
             space.attach_trigger("name",self,Trigger.NAMES)
             space.attach_trigger("language",self,Trigger.NAMES)
             space.attach_trigger("BodyLanguage",self,Trigger.NAMES)
-            space.attach_trigger("ShowIntention",self,Trigger.NAMES)
             space.attach_trigger("TellIstructions",self,Trigger.NAMES)
         
         def senseSelectAct(self):

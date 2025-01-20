@@ -90,7 +90,7 @@ class LEDsimulator():
 
 class LED():
 
-    def __init__(self, portname='COM4'):
+    def __init__(self, portname='COM3'):
         # Initialize the serial connection
         try:
             print('trying to open',portname)
@@ -116,6 +116,7 @@ class LED():
                 self.simulator.present(preset)
             else:
                 self.ser.write(preset.encode('utf-8'))  # Send the preset command
+                time.sleep(0.1)
             #print(f'Sent preset: {preset}')
         else:
             print(f'Invalid preset: {preset}')
@@ -135,7 +136,8 @@ class LED():
         else:
             command = f"raw{side}{bitmap}"
             self.ser.write(command.encode('utf-8'))  # Send the custom bitmap command
-        print(f'Sent custom bitmap: {bitmap}')
+            time.sleep(0.1)
+        #print(f'Sent custom bitmap: {bitmap}')
 
     def close(self):
         # Close the serial connection
@@ -146,14 +148,14 @@ class LED():
 
 if __name__ == '__main__':
 
-    sim = LEDsimulator()
-    sim.present('000C1020404040404040404020100C00')
-    time.sleep(1)
-    for _ in range(4):
-        sim.present('neutral')
-        time.sleep(0.25)
-        sim.present('surprise')
-        time.sleep(0.25)
+    #sim = LEDsimulator()
+    #sim.present('000C1020404040404040404020100C00')
+    #time.sleep(1)
+    #for _ in range(4):
+    #    sim.present('neutral')
+    #    time.sleep(0.25)
+    #    sim.present('surprise')
+    #    time.sleep(0.25)
 
     led = LED()
 
@@ -163,8 +165,11 @@ if __name__ == '__main__':
 
     # Wait and send a custom bitmap for left and right eyebrow and mouth (turn all LEDs on)
     led.send_custom_bitmap('l', 'FFFFFFFFFFFFFFFF')
+    time.sleep(0.1)
     led.send_custom_bitmap('r', 'FFFFFFFFFFFFFFFF')
+    time.sleep(0.1)
     led.send_custom_bitmap('m', 'FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF')
+    time.sleep(0.1)
     time.sleep(2)
 
     led.close()

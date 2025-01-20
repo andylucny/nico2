@@ -75,7 +75,7 @@ def replay(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.
 
     n = len(postures)
     durations = [duration/n]*n
-
+    
     if mode == ReplayMode.HEADONLY:
         time.sleep(np.sum(durations))
     else:
@@ -85,7 +85,8 @@ def replay(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.
     if mode == ReplayMode.HEADONLY:
         time.sleep(np.sum(durations))
     else:
-        play_movement(todicts(dofs,blend(postures[::-1],next_postures[::-1])),durations)
+        #play_movement(todicts(dofs,blend(postures[::-1],next_postures[::-1])),durations)
+        play_movement(todicts(dofs,postures[::-1]),durations)
     time.sleep(3)
 
 def relax():
@@ -95,6 +96,9 @@ def relax():
 if __name__ == '__main__':
     prepare(2)
     replay(2,7)
+    relax()
+    
+    """
     replay(7,6)
     replay(6,-1)
     relax()
@@ -117,3 +121,5 @@ if __name__ == '__main__':
     replay(5,-1,mode=ReplayMode.HEADONLY,percentage=60)
     relax()
     time.sleep(2)
+    """
+    

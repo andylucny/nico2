@@ -24,7 +24,7 @@ class NicoRobot():
     # Baud rate
     BAUDRATE                    = 1000000
     
-    def __init__(self, portname='COM6', motorConfig='nico_humanoid_upper_rh7d_ukba.json'):
+    def __init__(self, portname='COM4', motorConfig='nico_humanoid_upper_rh7d_ukba.json'):
         with open(motorConfig,'rt') as f:
             self.config = json.load(f)
         # motor attributes: ['offset', 'type', 'id', 'angle_limit', 'orientation']
