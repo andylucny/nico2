@@ -22,5 +22,5 @@ if __name__ == "__main__":
     def quit():
         os._exit(0)
 
-    SafetyButtonAgent()
+    SafetyAgent()
     
