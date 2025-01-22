@@ -3,45 +3,20 @@ from agentspace import space
 
 en_dictionary = {
     "@introduction" : "Hello, welcome to the legibility experiment!",
-    "@calibration" : "For calibration look at the red point in the middle and corners of the screen. Then touch the touchscreen.",
-    "@touch-please" : "Guess the point where robot points and touch it on the screen.",
+    "@calibration" : "For calibration look at the red point in the middle and corners of the screen. Then sit down and touch the touchscreen.",
+    "@letsgo" : "Let's go on! After each beep, guess the point where robot points and touch it on the screen. You have two seconds to do this.",
+    "@touch-expired" : "You failed to touch the screen within the time limit, never mind, maybe next time.",
     "@thank-you" : "Thank you.",
     "@done" : "Done.",
 }
 
 sk_dictionary = {
-    "Preparing. Please, wait.":
-    "Prebieha príprava, čakajte.",
-    
-    "Please enter your name and start the experiment by clicking Run":
-    "Zadajte prosím meno a odštartujte experiment kliknutím Run",
-    
-    "Starting experiment...":
-    "Experiment začína",
-    
-    "Please, use button Enter to stop me when you are ready to guess the touch point.":
-    "Použite tlačidlo stop keď budete schopný odhadnúť bod dotyku.",
-    
-    "You have used the stop button at ":
-    "Použili ste tlačidlo stop pri ",
-    
-    " percent, please touch the estimated touch point by your finger.":
-    " percentách, prosím, dotknite sa prstom odhadovaného miesta dotyku",
-    
-    "The movement of my arm has been stopped after ":
-    "Pohyb mojej ruky bol zastavený po ",
-    
-    "Thank you. Let us look on my intention.":
-    "Ďakujem. Pozrime sa, aký bol môj úmysel.",
-    
-    "This was my intention.":
-    "Toto bol môj úmysel.",
-
-    "Thank you.":
-    "Ďakujem.",
-    
-    "Data are recorded.":
-    "Dáta sú uložené."
+    "@introduction" : "Dobrý deň! Vitajte v našom experimente čitateľnosti!",
+    "@calibration" : "Pri kalibrácii sa pozerajte vždy na červený bod v strede alebo v rohoch obrazovky. Po ukončení kalibrácie sa posaďte a svoju pripravenosť potvrďte dotykom obrazovky.",
+    "@letsgo" : "Poďme na to! Vždy po zaznení zvukového signálu, dotknite sa obrazovky v mieste, kde odhadujete, že sa chcel dotknúť robot. Máte na to dve sekundy.",
+    "@touch-expired" : "Nestihli ste sa dotknúť obraovky v časovom limite, nevadí, snáď nabudúce.",
+    "@thank-you" : "Ďakujem.",
+    "@done" : "Hotovo.",
 }
 
 def translate(language,text):

@@ -5,17 +5,20 @@ import os
 import random
 from TouchAgent import clean
 from speak import speak
-from replay import prepare, replay, relax, ReplayMode
+from replay import prepare, replay_forward, replay_backward, relax, ReplayMode, replay_contraid
+from beep import beep, fail
+from recording import record
 from eyetracker import initialize_eyetracker, start_calibration, stop_calibration, start_eyetracker, stop_eyetracker
+from batch import load_batch
 
 class ExperimentAgent(Agent):
 
     def init(self):
         self.duration = 2.0
-        self.lastmode = 'congruent'
-        self.count = 0
         self.lastName = ""
         self.mouse = None
+        space["BodyLanguage"] = True
+        space["TellIstructions"] = True
         space.attach_trigger("experiment",self)
         
     def senseSelectAct(self):
@@ -30,7 +33,7 @@ class ExperimentAgent(Agent):
         clean()
         print('touchscreen cleaned')
         
-        if space(default=False)["BodyLanguage"]:
+        if space["BodyLanguage"]:
         
             print('focusing')
             # try to get focused to the face:
@@ -43,19 +46,16 @@ class ExperimentAgent(Agent):
                 
             # smile
             print('smiling')
-            space["dontLook"] = True
+            #space["dontLook"] = True
             space(validity=2.0)["emotion"] = "happiness"
             time.sleep(2.0)
         
-        print("preparing")
-        prepare(1,mode=ReplayMode.CONGRUENT)
-        
         print("introduction")
-        if space(default=False)["TellIstructions"]:
+        if space["TellIstructions"]:
             speak("@introduction")
         
         print("calibration")
-        if space(default=False)["TellIstructions"]:
+        if space["TellIstructions"]:
             speak("@calibration")
             
         initialize_eyetracker()
@@ -70,31 +70,77 @@ class ExperimentAgent(Agent):
         
         print('eyetracking started')
         start_eyetracker(name)
-        
+
+        if space["TellIstructions"]:
+            speak("@letsgo")
+            
+        if space["BodyLanguage"]:
+            print('stoping face following')
+            space["dontLook"] = True
+                
         print('movement starting')
+        
         if experiment == 1:
         
-            mode = space(default=1)["head"]
-            percentage = space(default=80)["StopMode"]
+            batch = []
+            for _ in range(3):
             
-            space['touch'] = None
-            one = np.random.randint(7)+1
+                id = np.random.randint(7)+1
+                percentage = space(default=80)["StopMode"]
+                mode = space(default=1)["head"]
+                
+                batch.append((id, percentage, mode))
             
-            replay(one,-1,mode=mode,percentage=percentage)
+        elif experiment == 2:
+        
+            batch = load_batch()
             
-            if space(default=False)["TellIstructions"]:
-                if space['touch'] is None:
-                    speak("@touch-please")
+        batch.append((-1, 0, 0))
 
+        print("preparing")
+        one, _, mode = batch[0]
+        prepare(one,mode)
+
+        for i in range(len(batch)-1):
+            space['count'] = i+1
+
+            one, percentage, mode = batch[i]
+            two, _, _ = batch[i+1]
+            
+            # clean the touchscreen
+            clean()
+            print('touchscreen cleaned')
+
+            # move forward
+            space['touch'] = None
+            replay_forward(one,mode=mode,percentage=percentage)
+
+            beep()
+            limit = 2.0 #[s]
+            t0 = time.time()
+
+            # move backward
+            replay_backward(one,two,mode=mode,percentage=percentage)
+            
             # confirm
             while space['touch'] is None:
+                if time.time() - t0 > limit:
+                    fail()
+                    if space["TellIstructions"]:
+                        speak("@touch-expired")
+                    break
                 time.sleep(0.25)
                 
             touch = space['touch']
-            if space(default=False)["TellIstructions"]:
-                speak("@thank-you")
+            contra = one if mode != ReplayMode.INCONGRUENT else replay_contraid()
+            record(name, i, one, contra, percentage, mode.value, touch)
+        
+        space['count'] = None
+        
+        if space["TellIstructions"]:
+            speak("@thank-you")
                 
-        if space(default=False)["TellIstructions"]:
+        if space["TellIstructions"]:
             speak("@done")
 
         relax()
@@ -105,7 +151,7 @@ class ExperimentAgent(Agent):
         space['experiment'] = 0
         
         # follow face if 
-        if space(default=False)["BodyLanguage"]:
+        if space["BodyLanguage"]:
             space["dontLook"] = None
         
 if __name__ == "__main__":

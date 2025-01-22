@@ -1,0 +1,8 @@
+Legend:
+G = gaze only
+GP60 = gaze & pointing coherent (60 % total movement)
+GP80 = gaze & pointing coherent (80 % total movement)
+P60 = pointing (60 % total movement)
+P80 = pointing (80 % total movement)
+I60 = gaze & pointing incoherent (60 % total movement)
+I80 = gaze & pointing incoherent (80 % total movement)

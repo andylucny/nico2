@@ -32,13 +32,14 @@ class RecorderAgent(Agent):
             os.makedirs(path, exist_ok=True)
             filename = path + "/video.avi"
             self.out = cv.VideoWriter()
-            self.out.open(filename,cv.VideoWriter_fourcc('M','J','P','G'),self.fps,self.size)
+            codec = cv.VideoWriter_fourcc('F','F','V','1') #no compression #cv.VideoWriter_fourcc('M','J','P','G') # compression
+            self.out.open(filename,codec,self.fps,self.size) 
             self.recording = True
         
         if self.recording:
             tl = cv.resize(space(default=self.blank)['humanImage'],self.hsize)
             tr = cv.resize(space(default=self.blank)['robotImage'],self.hsize)
-            bl = cv.resize(space(default=self.blank)['robotEye'],self.hsize) #np.copy(self.blank)
+            bl = cv.resize(space(default=self.blank)['robotWideFOV'],self.hsize) #np.copy(self.blank)
             br = cv.resize(space(default=self.blank)['touchImage'],self.hsize)
             cv.putText(br,str(datetime.now())[:22],(10,self.hsize[1]-15),0,1.0,(255,255,255),1)
             count = space(default=0)["count"]

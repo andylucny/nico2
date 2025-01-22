@@ -29,6 +29,17 @@ head_congruent_poses = {
 }
 head_incongruent_pose = [0.0, 23.0]
 
+#incoherence:
+contras = {
+    1 : [3,6],
+    2 : [5,7],
+    3 : [6],
+    4 : [5,7],
+    5 : [2,4],
+    6 : [3],
+    7 : [2,4],
+}
+
 from nicomover import enableTorque, play_movement, todicts, move_to_posture, todict, park
 
 print('motor control started')
@@ -40,23 +51,67 @@ class ReplayMode(Enum):
     CONGRUENT = auto()   # value 1
     INCONGRUENT = auto() # value 2
     HEADONLY = auto()    # value 3
+    NEUTRAL = auto()     # value 4
 
 def blend(postures1,postures2):
     fractions = np.linspace(0,1,len(postures1))
     return [ list(posture1 * (1-fraction) + posture2 * fraction) for fraction, posture1, posture2 in zip(fractions, np.array(postures1), np.array(postures2)) ]
 
+ready = False # in the start position
+
 def prepare(nextid, mode=ReplayMode.CONGRUENT, duration=2.0):
+    global ready
     dofs = right_arm_dofs
     postures = right_arm_trajectories[nextid]
     if mode != ReplayMode.HEADONLY:
         play_movement(todicts(dofs+right_fingers_dofs+left_arm_dofs,[postures[0]+right_fingers_pose+left_arm_pose]),[duration])
+        ready = True
     time.sleep(1)
 
-def replay(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
+contraid = 1   
+def replay_contraid():
+    return contraid
+ 
+def replay_forward(id, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
+    global contraid
     dofs = right_arm_dofs
     postures = right_arm_trajectories[id]
     
     if mode == ReplayMode.INCONGRUENT:
+        contraids = contras[id]
+        contraid = contraids[np.random.randint(len(contraids))]
+        head_posture = head_congruent_poses[contraid]
+    elif mode == ReplayMode.NEUTRAL:
+        head_posture = head_incongruent_pose
+    else:
+        head_posture = head_congruent_poses[id]
+    
+    if percentage < 100:
+        perc = percentage/100.0
+        postures = postures[:max(1,int(len(postures)*perc))]
+
+    play_movement(todicts(head_dofs,[head_posture]),[0.5])
+
+    n = len(postures)
+    durations = [duration/n]*n
+    
+    if mode == ReplayMode.HEADONLY:
+        if ready:
+            park()
+        time.sleep(np.sum(durations))
+    else:
+        if not ready:
+            play_movement(todicts(dofs+right_fingers_dofs+left_arm_dofs,[postures[0]+right_fingers_pose+left_arm_pose]),[duration])
+        play_movement(todicts(dofs,postures),durations)
+   
+def replay_backward(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
+    global ready
+    dofs = right_arm_dofs
+    postures = right_arm_trajectories[id]
+    
+    if mode == ReplayMode.INCONGRUENT:
+        head_posture = head_congruent_poses[contraid]
+    elif mode == ReplayMode.NEUTRAL:
         head_posture = head_incongruent_pose
     else:
         head_posture = head_congruent_poses[id]
@@ -78,48 +133,22 @@ def replay(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.
     
     if mode == ReplayMode.HEADONLY:
         time.sleep(np.sum(durations))
+        ready = False
     else:
-        play_movement(todicts(dofs,postures),durations)
-    time.sleep(2)
-   
-    if mode == ReplayMode.HEADONLY:
-        time.sleep(np.sum(durations))
-    else:
-        #play_movement(todicts(dofs,blend(postures[::-1],next_postures[::-1])),durations)
-        play_movement(todicts(dofs,postures[::-1]),durations)
-    time.sleep(3)
+        play_movement(todicts(dofs,blend(postures[::-1],next_postures[::-1])),durations)
+        ready = True
 
 def relax():
     park()  
     time.sleep(2)
 
 if __name__ == '__main__':
+    from beep import beep
+
     prepare(2)
-    replay(2,7)
+    replay_forward(2,mode=ReplayMode.INCONGRUENT,percentage=80) # INCONGRUENT, HEADONLY
+    beep()
+    replay_backward(2,7,mode=ReplayMode.INCONGRUENT,percentage=80)
     relax()
     
-    """
-    replay(7,6)
-    replay(6,-1)
-    relax()
-    time.sleep(2)
-    
-    prepare(1,mode=ReplayMode.CONGRUENT)
-    replay(1,3,mode=ReplayMode.CONGRUENT,percentage=60)
-    replay(3,-1,mode=ReplayMode.CONGRUENT,percentage=60)
-    relax()
-    time.sleep(2)
-
-    prepare(4,mode=ReplayMode.INCONGRUENT)
-    replay(4,5,mode=ReplayMode.INCONGRUENT,percentage=60)
-    replay(5,-1,mode=ReplayMode.INCONGRUENT,percentage=60)
-    relax()
-    time.sleep(2)
-
-    prepare(7,mode=ReplayMode.HEADONLY)
-    replay(7,5,mode=ReplayMode.HEADONLY,percentage=60)
-    replay(5,-1,mode=ReplayMode.HEADONLY,percentage=60)
-    relax()
-    time.sleep(2)
-    """
     

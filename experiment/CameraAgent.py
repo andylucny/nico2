@@ -128,29 +128,32 @@ if __name__ == "__main__":
     def quit():
         os._exit(0)
 
-    camera_agent = CameraAgent('See3CAM_CU135', 0, 'bgr', fps=30, zoom=350)
-    time.sleep(1)
-    #camera_agent2 = CameraAgent('See3CAM_CU135', 1, 'wide', fps=10, zoom=170)
-    #camera_agent2 = CameraAgent('HD Pro Webcam C920', 1, 'wide', fps=10) # v bruchu robota
-    camera_agent2 = CameraAgent('HD Pro Webcam C920', 0, 'wide', fps=10) # v bruchu robota
+    #camera_agent = CameraAgent('See3CAM_CU135', 0, '0', fps=30, zoom=350)
+    camera_agent1 = CameraAgent('See3CAM_CU135', 0, '0', fps=10, zoom=170)
+    camera_agent2 = CameraAgent('HD Pro Webcam C920', 0, '1', fps=10) # from the robot's stomach
+    #camera_agent2 = CameraAgent('USB2.0 PC CAMERA', 0, '1', fps=10) # from the robot's stomach
+    camera_agent3 = CameraAgent('Brio 500', 0, '2', fps=10) # from the side
     
     time.sleep(1)
 
     class ViewerAgent(Agent):
     
         def init(self):
-            space.attach_trigger('bgr',self)
+            space.attach_trigger('0',self)
             self.t0 = int(time.time())
             self.fs = 0
             self.fps = 0
             
         def senseSelectAct(self):
-            frame = space["bgr"]
+            frame = space["0"]
             if frame is None:
                 self.stopped = True
                 return
 
-            frame2 = space["wide"]
+            frame1 = space["1"]
+            if frame1 is not None:
+                frame = cv.hconcat([frame,frame1])
+            frame2 = space["2"]
             if frame2 is not None:
                 frame = cv.hconcat([frame,frame2])
                 
@@ -171,9 +174,10 @@ if __name__ == "__main__":
                 return
     
     viewer_agent = ViewerAgent()
-    time.sleep(20)
+    time.sleep(3000)
     viewer_agent.stop()
-    camera_agent.stop()
+    camera_agent1.stop()
     camera_agent2.stop()
+    camera_agent3.stop()
     time.sleep(1)
     cv.destroyAllWindows()

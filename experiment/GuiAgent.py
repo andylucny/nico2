@@ -27,22 +27,25 @@ class GuiAgent(Agent):
                 sg.Radio("SK", "Language:", False, size=(2, 1), key="Language-SK", enable_events=True), 
             ],
             [ 
-                sg.Checkbox("Follow face and smile", default=False, key='BodyLanguage', enable_events=True),
-                sg.Checkbox("Tell instructions", default=False, key='TellIstructions', enable_events=True),
+                sg.Checkbox("Follow face and smile", default=True, key='BodyLanguage', enable_events=True),
+                sg.Checkbox("Tell instructions", default=True, key='TellIstructions', enable_events=True),
+            ],
+            [
                 sg.Text("Head:", size=(5, 1)), 
                 sg.Radio("congruent", "Head:", True, size=(8, 1), key="Head-congruent", enable_events=True), 
                 sg.Radio("incongruent", "Head:", False, size=(8, 1), key="Head-incongruent", enable_events=True), 
                 sg.Radio("only", "Head:", False, size=(8, 1), key="Head-only", enable_events=True), 
+                sg.Radio("neutral", "Head:", False, size=(8, 1), key="Head-neutral", enable_events=True), 
             ],
             [ 
                 sg.Text("Stop mode:", size=(9, 1)), 
                 sg.Radio("at 60%", "StopMode:", False, size=(6, 1), key="StopMode-60", enable_events=True),
                 sg.Radio("at 80%", "StopMode:", True, size=(6, 1), key="StopMode-80", enable_events=True),
                 sg.Radio("at 100%", "StopMode:", False, size=(6, 1), key="StopMode-100", enable_events=True),
+                sg.Button("Run", size=(3, 1)),
             ],
             [
                 sg.Button("Run batch", size=(9, 1)),
-                sg.Button("Run", size=(3, 1)),
                 sg.Button("Stop", size=(4, 1)),
                 sg.Button("Exit", size=(7, 1)),
             ],
@@ -82,7 +85,7 @@ class GuiAgent(Agent):
                 space["StopMode"] = percentage
             elif event.startswith("Head-"):
                 try:
-                    space["head"] = ["unknown","congruent","incongruent","only"].index(event[len("Head-"):])
+                    space["head"] = ["unknown","congruent","incongruent","only","neutral"].index(event[len("Head-"):])
                 except:
                     print("unknown head mode !!!")
                     space["head"] = 1 # congruent
@@ -106,7 +109,7 @@ class GuiAgent(Agent):
             human_img = space(default=blank)['humanImage']
             human_imgbytes = cv2.imencode(".png", cv2.resize(human_img,(blank.shape[1],blank.shape[0])))[1].tobytes()
             window["humanImage"].update(data=human_imgbytes)
-            robot_eye = space(default=blank)['robotEye']
+            robot_eye = space(default=blank)['robotWideFOV'] # 'robotEye'
             robot_eyebytes = cv2.imencode(".png", cv2.resize(robot_eye,(blank.shape[1],blank.shape[0])))[1].tobytes()
             window["robotEye"].update(data=robot_eyebytes)
             robot_touch = np.copy(space(default=blank)['touchImage'])
