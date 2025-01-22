@@ -33,7 +33,7 @@ class GuiAgent(Agent):
             [
                 sg.Text("Head:", size=(5, 1)), 
                 sg.Radio("congruent", "Head:", True, size=(8, 1), key="Head-congruent", enable_events=True), 
-                sg.Radio("incongruent", "Head:", False, size=(8, 1), key="Head-incongruent", enable_events=True), 
+                sg.Radio("incongruent", "Head:", False, size=(10, 1), key="Head-incongruent", enable_events=True), 
                 sg.Radio("only", "Head:", False, size=(8, 1), key="Head-only", enable_events=True), 
                 sg.Radio("neutral", "Head:", False, size=(8, 1), key="Head-neutral", enable_events=True), 
             ],
