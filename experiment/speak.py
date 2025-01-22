@@ -14,7 +14,7 @@ sk_dictionary = {
     "@introduction" : "Dobrý deň! Vitajte v našom experimente čitateľnosti!",
     "@calibration" : "Pri kalibrácii sa pozerajte vždy na červený bod v strede alebo v rohoch obrazovky. Po ukončení kalibrácie sa posaďte a svoju pripravenosť potvrďte dotykom obrazovky.",
     "@letsgo" : "Poďme na to! Vždy po zaznení zvukového signálu, dotknite sa obrazovky v mieste, kde odhadujete, že sa chcel dotknúť robot. Máte na to dve sekundy.",
-    "@touch-expired" : "Nestihli ste sa dotknúť obraovky v časovom limite, nevadí, snáď nabudúce.",
+    "@touch-expired" : "Nestihli ste sa dotknúť obrazovky v časovom limite, nevadí, snáď nabudúce.",
     "@thank-you" : "Ďakujem.",
     "@done" : "Hotovo.",
 }
