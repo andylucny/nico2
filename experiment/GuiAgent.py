@@ -5,6 +5,7 @@ import cv2
 import time
 import os
 from datetime import datetime
+from replay import ReplayMode
 
 class GuiAgent(Agent):
       
@@ -85,7 +86,13 @@ class GuiAgent(Agent):
                 space["StopMode"] = percentage
             elif event.startswith("Head-"):
                 try:
-                    space["head"] = ["unknown","congruent","incongruent","only","neutral"].index(event[len("Head-"):])
+                    modes = {
+                        "congruent" : ReplayMode.CONGRUENT,
+                        "incongruent" : ReplayMode.INCONGRUENT,
+                        "only" : ReplayMode.HEADONLY,
+                        "neutral" : ReplayMode.NEUTRAL,
+                    }
+                    space["head"] = modes[event[len("Head-"):]]
                 except:
                     print("unknown head mode !!!")
                     space["head"] = 1 # congruent

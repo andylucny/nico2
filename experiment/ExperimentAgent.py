@@ -5,9 +5,9 @@ import os
 import random
 from TouchAgent import clean
 from speak import speak
-from replay import prepare, replay_forward, replay_backward, relax, ReplayMode, replay_contraid
+from replay import prepare, replay_forward, replay_backward, relax, ReplayMode, get_contraid
 from beep import beep, fail
-from recording import record
+from recording import record, get_point
 from eyetracker import initialize_eyetracker, start_calibration, stop_calibration, start_eyetracker, stop_eyetracker
 from batch import load_batch
 
@@ -66,6 +66,9 @@ class ExperimentAgent(Agent):
         while space['touch'] is None:
             time.sleep(0.25)
 
+        clean()
+        print('touchscreen cleaned')
+        
         stop_calibration()
         
         print('eyetracking started')
@@ -112,6 +115,8 @@ class ExperimentAgent(Agent):
             print('touchscreen cleaned')
 
             # move forward
+            contra = one if mode != ReplayMode.INCONGRUENT else get_contraid(one)
+            space['emulated'] = [ get_point(one), get_point(contra) ]
             space['touch'] = None
             replay_forward(one,mode=mode,percentage=percentage)
 
@@ -132,7 +137,6 @@ class ExperimentAgent(Agent):
                 time.sleep(0.25)
                 
             touch = space['touch']
-            contra = one if mode != ReplayMode.INCONGRUENT else replay_contraid()
             record(name, i, one, contra, percentage, mode.value, touch)
         
         space['count'] = None
@@ -147,6 +151,9 @@ class ExperimentAgent(Agent):
         time.sleep(2)
         
         stop_eyetracker()
+        
+        clean()
+        print('touchscreen cleaned')
         
         space['experiment'] = 0
         

@@ -83,16 +83,16 @@ class TouchAgent(Agent):
         #pygame.event.set_blocked(pygame.MOUSEBUTTONUP)
         #pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
         pygame.display.set_caption('NICOs touchscreen')
-        HWND = pygame.display.get_wm_info()['window']
-        GWL_EXSTYLE = -20
-        styles = ctypes.windll.user32.GetWindowLongA(HWND,GWL_EXSTYLE)
-        WS_EX_NOACTIVATE = 0x08000000
-        styles |= WS_EX_NOACTIVATE
-        ctypes.windll.user32.SetWindowLongA(HWND,GWL_EXSTYLE,styles)
+        if ratio == 1:
+            HWND = pygame.display.get_wm_info()['window']
+            GWL_EXSTYLE = -20
+            styles = ctypes.windll.user32.GetWindowLongA(HWND,GWL_EXSTYLE)
+            WS_EX_NOACTIVATE = 0x08000000
+            styles |= WS_EX_NOACTIVATE
+            ctypes.windll.user32.SetWindowLongA(HWND,GWL_EXSTYLE,styles)
         screen_info = pygame.display.Info()
         width, height = screen_info.current_w, screen_info.current_h # 
-        color_index = 0
-        colors = [ (255,0,0), (0,255,0), (0,255,255), (80,80,255) ] # Red, Green, Cyan, Light Blue
+        colors = [ (255,0,0), (0,255,0), (255,255,0), (80,80,255) ] # Red, Green, Yellow, Light Blue
         print('initialized')
         
         # Run the event loop
@@ -108,24 +108,18 @@ class TouchAgent(Agent):
                     if event.type == pygame.FINGERDOWN:
                         pos_x, pos_y = int(width*event.x), int(height*event.y)
                     else:
-                        print(pygame.mouse.get_pos())
                         pos_x, pos_y = pygame.mouse.get_pos()
-                        print('x',pos_x,'y',pos_y)
                         pos_x, pos_y = ratio*pos_x, ratio*pos_y
                     # Process the first moment of touch
-                    circle_color = colors[color_index]
-                    color_index += 1
-                    if color_index == len(colors):
-                        color_index = 0
+                    circle_color = colors[-1] 
                     circle_radius = 30
                     circle_position = (pos_x, pos_y)
                     print("touch detected at",circle_position)
                     space['touch'] = circle_position
-                    if not space(default=False)['hide']:
-                        #pygame.draw.circle(screen, circle_color, circle_position, circle_radius)
-                        #cross(screen, circle_color, circle_position, circle_radius, 3)
-                        pygame.display.flip()
-                    #cv.circle(image,circle_position,circle_radius,(circle_color[2],circle_color[1],circle_color[0]),cv.FILLED)
+                    ##pygame.draw.circle(screen, circle_color, circle_position, circle_radius)
+                    #cross(screen, circle_color, circle_position, circle_radius, 3)
+                    #pygame.display.flip()
+                    cv.circle(image,circle_position,circle_radius,(circle_color[2],circle_color[1],circle_color[0]),cv.FILLED)
                     #cv_cross(image,circle_position,circle_radius,(circle_color[2],circle_color[1],circle_color[0]),7)
                     space['touchImage'] = image
                     #pyautogui.moveTo(mouse[0], mouse[1])
@@ -146,18 +140,19 @@ class TouchAgent(Agent):
             pygame.display.flip()
             emulated = space['emulated']
             if emulated is not None:
-                circle_color = colors[color_index]
-                color_index += 1
-                if color_index == len(colors):
-                    color_index = 0
                 circle_radius = 30
-                circle_position = emulated
-                #if space(default=False)['ShowIntention']:
-                #    #pygame.draw.circle(screen, circle_color, circle_position, circle_radius)
-                #    #cross(screen, circle_color, circle_position, circle_radius)
-                #    pygame.display.flip()
-                #cv.circle(image,circle_position,circle_radius,(circle_color[2],circle_color[1],circle_color[0]),cv.FILLED)                
-                cv_cross(image,circle_position,circle_radius,(circle_color[2],circle_color[1],circle_color[0]),7)
+                if emulated[0][0] == emulated[1][0] and emulated[0][1] == emulated[1][1]:
+                    circle_positions = emulated[:1]
+                    circle_colors = colors[2:]
+                else:
+                    circle_positions = emulated
+                    circle_colors = colors
+                for circle_position, circle_color in zip(circle_positions,circle_colors):
+                    ##pygame.draw.circle(screen, circle_color, circle_position, circle_radius)
+                    #cross(screen, circle_color, circle_position, circle_radius)
+                    #pygame.display.flip()
+                    cv.circle(image,circle_position,circle_radius,(circle_color[2],circle_color[1],circle_color[0]),cv.FILLED)                
+                    #cv_cross(image,circle_position,circle_radius,(circle_color[2],circle_color[1],circle_color[0]),7)
                 space['touchImage'] = image
                 space['emulated'] = None
             time.sleep(0.025)

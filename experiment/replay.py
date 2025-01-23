@@ -69,17 +69,17 @@ def prepare(nextid, mode=ReplayMode.CONGRUENT, duration=2.0):
     time.sleep(1)
 
 contraid = 1   
-def replay_contraid():
+def get_contraid(id):
+    global contraid
+    contraids = contras[id]
+    contraid = contraids[np.random.randint(len(contraids))]
     return contraid
  
 def replay_forward(id, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
-    global contraid
     dofs = right_arm_dofs
     postures = right_arm_trajectories[id]
     
     if mode == ReplayMode.INCONGRUENT:
-        contraids = contras[id]
-        contraid = contraids[np.random.randint(len(contraids))]
         head_posture = head_congruent_poses[contraid]
     elif mode == ReplayMode.NEUTRAL:
         head_posture = head_incongruent_pose

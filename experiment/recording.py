@@ -14,6 +14,9 @@ points = {
     7 : [971, 612],
 }
 
+def get_point(id):
+    return points[id]
+
 #modes = ["unknown","congruent","incongruent","head only","neutral"]
 modes = ["-","GP","I","G","P"]
 
