@@ -96,7 +96,13 @@ class ExperimentAgent(Agent):
             
         elif experiment == 2:
         
-            batch = load_batch()
+            batch = load_batch("batch1.txt")
+            group = 1 
+            
+        elif experiment == 3:
+        
+            batch = load_batch("batch2.txt")
+            group = 2
             
         batch.append((-1, 0, 0))
 
@@ -137,7 +143,7 @@ class ExperimentAgent(Agent):
                 time.sleep(0.25)
                 
             touch = space['touch']
-            record(name, i, one, contra, percentage, mode.value, touch)
+            record(name, group, i, one, contra, percentage, mode.value, touch)
         
         space['count'] = None
         

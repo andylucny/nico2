@@ -46,7 +46,8 @@ class GuiAgent(Agent):
                 sg.Button("Run", size=(3, 1)),
             ],
             [
-                sg.Button("Run batch", size=(9, 1)),
+                sg.Button("Run batch 1", size=(11, 1)),
+                sg.Button("Run batch 2", size=(11, 1)),
                 sg.Button("Stop", size=(4, 1)),
                 sg.Button("Exit", size=(7, 1)),
             ],
@@ -96,8 +97,10 @@ class GuiAgent(Agent):
                 except:
                     print("unknown head mode !!!")
                     space["head"] = 1 # congruent
-            elif event == "Run batch":
+            elif event == "Run batch 1":
                 space["experiment"] = 2
+            elif event == "Run batch 2":
+                space["experiment"] = 3
             elif event == "Run":
                 space["experiment"] = 1
             elif event == "Stop":
