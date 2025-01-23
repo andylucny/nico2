@@ -90,7 +90,7 @@ class ExperimentAgent(Agent):
             
                 id = np.random.randint(7)+1
                 percentage = space(default=80)["StopMode"]
-                mode = space(default=1)["head"]
+                mode = space(default=ReplayMode.CONGRUENT)["head"]
                 
                 batch.append((id, percentage, mode))
             

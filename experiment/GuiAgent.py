@@ -22,7 +22,7 @@ class GuiAgent(Agent):
             ],
             [ 
                 sg.Text("Name", size=(5, 1)),
-                sg.Input("???", size=(25, 1), key="Name"), 
+                sg.Input("xy", size=(25, 1), key="Name"), 
                 sg.Text("Language:", size=(9, 1)), 
                 sg.Radio("EN", "Language:", True, size=(2, 1), key="Language-EN", enable_events=True), 
                 sg.Radio("SK", "Language:", False, size=(2, 1), key="Language-SK", enable_events=True), 
@@ -101,10 +101,8 @@ class GuiAgent(Agent):
             elif event == "Run":
                 space["experiment"] = 1
             elif event == "Stop":
-                if space(default=0)["experiment"] > 0:
-                    space["stop"] = True
-                    print("Stop button pressed")
-                    break
+                print("Stop button pressed")
+                break
             
             if "Name" in values.keys():
                 if space(default="")["name"] != values["Name"]:
