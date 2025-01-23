@@ -104,6 +104,7 @@ class GuiAgent(Agent):
                 if space(default=0)["experiment"] > 0:
                     space["stop"] = True
                     print("Stop button pressed")
+                    break
             
             if "Name" in values.keys():
                 if space(default="")["name"] != values["Name"]:
