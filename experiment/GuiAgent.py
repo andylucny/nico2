@@ -24,8 +24,8 @@ class GuiAgent(Agent):
                 sg.Text("Name", size=(5, 1)),
                 sg.Input("xy", size=(25, 1), key="Name"), 
                 sg.Text("Language:", size=(9, 1)), 
-                sg.Radio("EN", "Language:", True, size=(2, 1), key="Language-EN", enable_events=True), 
-                sg.Radio("SK", "Language:", False, size=(2, 1), key="Language-SK", enable_events=True), 
+                sg.Radio("EN", "Language:", False, size=(2, 1), key="Language-EN", enable_events=True), 
+                sg.Radio("SK", "Language:", True, size=(2, 1), key="Language-SK", enable_events=True), 
             ],
             [ 
                 sg.Checkbox("Follow face and smile", default=True, key='BodyLanguage', enable_events=True),

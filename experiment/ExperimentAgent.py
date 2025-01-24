@@ -53,6 +53,25 @@ class ExperimentAgent(Agent):
         print("introduction")
         if space["TellIstructions"]:
             speak("@introduction")
+            
+        if experiment > 1:
+
+            print("introduction")
+            if space["TellIstructions"]:
+                speak("@before-demo")
+                
+            # demo
+            print("demo")
+            demo = 1
+            prepare(demo,ReplayMode.CONGRUENT)
+            replay_forward(demo,mode=ReplayMode.CONGRUENT,percentage=100)
+            time.sleep(1)
+            replay_backward(demo,-1,mode=ReplayMode.CONGRUENT,percentage=100)
+            relax()
+                
+            print("after demo")
+            if space["TellIstructions"]:
+                speak("@after-demo")
         
         print("calibration")
         if space["TellIstructions"]:
