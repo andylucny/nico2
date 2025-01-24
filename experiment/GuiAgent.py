@@ -132,7 +132,8 @@ class GuiAgent(Agent):
             
             experimentState = space(default=False)["experiment"]
             if experimentState != lastExperimentState:
-                window["Run batch"].update(disabled=(experimentState>0))
+                window["Run batch 1"].update(disabled=(experimentState>0))
+                window["Run batch 2"].update(disabled=(experimentState>0))
                 window["Run"].update(disabled=(experimentState>0))
                 lastExperimentState = experimentState
 
