@@ -33,6 +33,7 @@ class LookAroundAgent(Agent):
         
         head_x = getAngle("head_z")
         head_y = getAngle("head_y")
+        space(validity=0.3)['head_x'] = head_x
         
         _, limit_x = head_z_limits(head_y)
         

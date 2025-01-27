@@ -28,9 +28,9 @@ def load_batch(path='batch.txt'):
             try:
                 percentage = int(percentage)
             except ValueError:
-                percentage = 100
+                percentage = 20
 
-            batch.append((id, percentage, mode))
+            batch.append((rank, id, percentage, mode))
 
     return batch
 

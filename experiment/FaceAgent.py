@@ -95,10 +95,21 @@ class FaceAgent(Agent):
 
         if len(rects) > 0:
             
+            rects = np.array(rects,np.float32)
+            
             # select the best face
-            best = np.argmin([rect[4] for rect in rects])
+            FOV = 156 # [dg] for zoom 170
+            rot = space(default=0.0)['head_x'] / (FOV/2)
+            mean = w/2 - w*rot/2
+            sigma = w/4
+            x = (rects[:,0]+rects[:,2])/2
+            confidences = rects[:,4]
+            pe = np.exp(-(x-mean)**2/(2*sigma**2))
+            best = np.argmax(confidences*pe)
+            #best = np.argmin([rect[4] for rect in rects])
 
-            startX, startY, endX, endY, confidence = rects[best]
+            startX, startY, endX, endY = rects[best,:4].astype(np.int32)
+            confidence = rects[best,4]
             cv.rectangle(result, (startX, startY), (endX, endY), (0, 0, 255), 2)
             text = "{:.2f}%".format(confidence * 100)
             cv.putText(result, text, (startX, startY-5), 0, 1.0, (0, 0, 255), 2)
@@ -115,6 +126,7 @@ class FaceAgent(Agent):
         #cv.waitKey(1)
 
 if __name__ == '__main__':
+    space['head_x'] = -30.0
     FaceAgent('bgr',nameFacePoint='point')
     camera = cv.VideoCapture(0)
     t0 = int(time.time())

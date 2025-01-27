@@ -116,9 +116,10 @@ class TouchAgent(Agent):
                     circle_position = (pos_x, pos_y)
                     print("touch detected at",circle_position)
                     space['touch'] = circle_position
-                    ##pygame.draw.circle(screen, circle_color, circle_position, circle_radius)
-                    #cross(screen, circle_color, circle_position, circle_radius, 3)
-                    #pygame.display.flip()
+                    screen.fill((0, 0, 0))
+                    #pygame.draw.circle(screen, circle_color, circle_position, circle_radius)
+                    cross(screen, circle_color, circle_position, circle_radius, 3)
+                    pygame.display.flip()
                     cv.circle(image,circle_position,circle_radius,(circle_color[2],circle_color[1],circle_color[0]),cv.FILLED)
                     #cv_cross(image,circle_position,circle_radius,(circle_color[2],circle_color[1],circle_color[0]),7)
                     space['touchImage'] = image

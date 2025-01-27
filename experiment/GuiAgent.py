@@ -1,7 +1,7 @@
 import PySimpleGUI as sg
 from agentspace import Agent, space, Trigger
 import numpy as np
-import cv2
+import cv2 as cv
 import time
 import os
 from datetime import datetime
@@ -30,12 +30,21 @@ class GuiAgent(Agent):
             [ 
                 sg.Checkbox("Follow face and smile", default=True, key='BodyLanguage', enable_events=True),
                 sg.Checkbox("Tell instructions", default=True, key='TellIstructions', enable_events=True),
+                sg.Checkbox("repeat", default=False, key='DoRepeat', enable_events=True),
+                sg.Checkbox("rests", default=False, key='DoRests', enable_events=True),
             ],
+            [
+                sg.Button("Run batch 1", size=(11, 1)),
+                sg.Button("Run batch 2", size=(11, 1)),
+                sg.Button("Stop", size=(4, 1)),
+                sg.Button("Exit", size=(7, 1)),
+            ],
+            [sg.HSeparator()],
             [
                 sg.Text("Head:", size=(5, 1)), 
                 sg.Radio("congruent", "Head:", True, size=(8, 1), key="Head-congruent", enable_events=True), 
                 sg.Radio("incongruent", "Head:", False, size=(10, 1), key="Head-incongruent", enable_events=True), 
-                sg.Radio("only", "Head:", False, size=(8, 1), key="Head-only", enable_events=True), 
+                sg.Radio("only", "Head:", False, size=(6, 1), key="Head-only", enable_events=True), 
                 sg.Radio("neutral", "Head:", False, size=(8, 1), key="Head-neutral", enable_events=True), 
             ],
             [ 
@@ -43,13 +52,11 @@ class GuiAgent(Agent):
                 sg.Radio("at 60%", "StopMode:", False, size=(6, 1), key="StopMode-60", enable_events=True),
                 sg.Radio("at 80%", "StopMode:", True, size=(6, 1), key="StopMode-80", enable_events=True),
                 sg.Radio("at 100%", "StopMode:", False, size=(6, 1), key="StopMode-100", enable_events=True),
-                sg.Button("Run", size=(3, 1)),
             ],
             [
-                sg.Button("Run batch 1", size=(11, 1)),
-                sg.Button("Run batch 2", size=(11, 1)),
-                sg.Button("Stop", size=(4, 1)),
-                sg.Button("Exit", size=(7, 1)),
+                sg.Checkbox("calibration", default=False, key='DoCalibration', enable_events=True),
+                sg.Checkbox("introduction", default=False, key='DoIntroduction', enable_events=True),
+                sg.Button("Run", size=(3, 1)),
             ],
         ]
         window = sg.Window("Experiment", layout, finalize=True)
@@ -81,6 +88,14 @@ class GuiAgent(Agent):
                     space["dontLook"] = None
             elif event == "TellIstructions":
                 space["TellIstructions"] = values["TellIstructions"]
+            elif event == "DoCalibration":
+                space["DoCalibration"] = values["DoCalibration"]
+            elif event == "DoIntroduction":
+                space["DoIntroduction"] = values["DoIntroduction"]
+            elif event == "DoRepeat":
+                space["DoRepeat"] = values["DoRepeat"]
+            elif event == "DoRests":
+                space["DoRests"] = values["DoRests"]
             elif event.startswith("StopMode-"):
                 option = event[len("StopMode-"):]
                 percentage = int(option)
@@ -113,21 +128,21 @@ class GuiAgent(Agent):
                     print("name",space["name"])
                     
             robot_img = space(default=blank)['robotImage']
-            robot_imgbytes = cv2.imencode(".png", cv2.resize(robot_img,(blank.shape[1],blank.shape[0])))[1].tobytes()
+            robot_imgbytes = cv.imencode(".png", cv.resize(robot_img,(blank.shape[1],blank.shape[0])))[1].tobytes()
             window["robotImage"].update(data=robot_imgbytes)
             human_img = space(default=blank)['humanImage']
-            human_imgbytes = cv2.imencode(".png", cv2.resize(human_img,(blank.shape[1],blank.shape[0])))[1].tobytes()
+            human_imgbytes = cv.imencode(".png", cv.resize(human_img,(blank.shape[1],blank.shape[0])))[1].tobytes()
             window["humanImage"].update(data=human_imgbytes)
             robot_eye = space(default=blank)['robotWideFOV'] # 'robotEye'
-            robot_eyebytes = cv2.imencode(".png", cv2.resize(robot_eye,(blank.shape[1],blank.shape[0])))[1].tobytes()
+            robot_eyebytes = cv.imencode(".png", cv.resize(robot_eye,(blank.shape[1],blank.shape[0])))[1].tobytes()
             window["robotEye"].update(data=robot_eyebytes)
             robot_touch = np.copy(space(default=blank)['touchImage'])
-            robot_touch_resized = cv2.resize(robot_touch,(blank.shape[1],blank.shape[0]))
-            cv2.putText(robot_touch_resized,str(datetime.now())[:22],(10,robot_touch_resized.shape[0]-15),0,1.0,(255,255,255),1)
+            robot_touch_resized = cv.resize(robot_touch,(blank.shape[1],blank.shape[0]))
+            cv.putText(robot_touch_resized,str(datetime.now())[:22],(10,robot_touch_resized.shape[0]-15),0,0.7,(255,255,255),1)
             count = space(default=0)["count"]
             if count > 0:
-                cv2.putText(robot_touch_resized,'#'+str(count),(10,28),0,1.0,(255,255,255),1)
-            robot_touchbytes = cv2.imencode(".png", robot_touch_resized)[1].tobytes()
+                cv.putText(robot_touch_resized,'#'+str(count),(10,28),0,1.0,(255,255,255),1)
+            robot_touchbytes = cv.imencode(".png", robot_touch_resized)[1].tobytes()
             window["touchImage"].update(data=robot_touchbytes)
             
             experimentState = space(default=False)["experiment"]

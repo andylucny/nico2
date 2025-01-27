@@ -45,4 +45,4 @@ def record(name, group, i, id, contraid, percentage, mode, point):
         id = -1
     
     with open(filename,'at') as f:
-        f.write(f'{group}{i},{percentage},{mode},{modes[mode]},{id},{contraid},{points[id][0]},{points[id][1]},{point[0]},{point[1]},{distance},{timestamp},{current_datetime_str}\n')
+        f.write(f'{group},{i},{percentage},{mode},{modes[mode]},{id},{contraid},{points[id][0]},{points[id][1]},{point[0]},{point[1]},{distance},{timestamp},{current_datetime_str}\n')

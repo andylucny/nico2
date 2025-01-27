@@ -9,8 +9,13 @@ ctx = zmq.Context()
 socket = zmq.Socket(ctx, zmq.REQ)
 socket.connect("tcp://127.0.0.1:50020")
 socket.setsockopt(zmq.RCVTIMEO, 1000)
+eyetracker_on = False
+
+def is_eyetracker():
+    return eyetracker_on
 
 def initialize_eyetracker():
+    global eyetracker_on
     try:
         # Measure round trip delay
         t = time.time()
@@ -20,28 +25,35 @@ def initialize_eyetracker():
         # set current Pupil time to 0.0
         socket.send_string("T 0.0")
         print(socket.recv_string())
+        eyetracker_on = True
     except:
+        eyetracker_on = False
         print('eyetracker does not respond')
     
 def start_calibration():
+    global eyetracker_on
     try:
         #notify({"subject": "calibration.should_start"})
         socket.send_string("C")
         print("Eye tracking calibration started")
         print(socket.recv_string())
     except:
+        eyetracker_on = False
         print('eyetracker does not respond')
 
 def stop_calibration():
+    global eyetracker_on
     try:
         #notify({"subject": "calibration.should_stop"})
         socket.send_string("c")
         print("Eye tracking calibration stoped")
         print(socket.recv_string())
     except:
+        eyetracker_on = False
         print('eyetracker does not respond')
 
 def start_eyetracker(subject):
+    global eyetracker_on
     try:
         # start recording
         time.sleep(1)
@@ -53,13 +65,16 @@ def start_eyetracker(subject):
         #socket.send_string("t")
         #print(socket.recv_string())
     except:
+        eyetracker_on = False
         print('eyetracker does not respond')
 
 def stop_eyetracker():
+    global eyetracker_on
     try:
         # stop recording
         socket.send_string("r")
         print("Eye tracking recoding stoped")
         print(socket.recv_string())
     except:
+        eyetracker_on = False
         print('eyetracker does not respond')

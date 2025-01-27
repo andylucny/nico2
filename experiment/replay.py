@@ -53,6 +53,7 @@ class ReplayMode(Enum):
     INCONGRUENT = auto() # value 2
     HEADONLY = auto()    # value 3
     NEUTRAL = auto()     # value 4
+    END = auto()         # value 5
 
 def blend(postures1,postures2):
     fractions = np.linspace(0,1,len(postures1))
@@ -64,10 +65,10 @@ def prepare(nextid, mode=ReplayMode.CONGRUENT, duration=2.0):
     global ready
     dofs = right_arm_dofs
     postures = right_arm_trajectories[nextid]
-    #play_movement(todicts(head_dofs,[head_default_pose]),[0.5])
-    if mode != ReplayMode.HEADONLY:
+    if mode.value != ReplayMode.HEADONLY.value:
         play_movement(todicts(dofs+right_fingers_dofs+left_arm_dofs,[postures[0]+right_fingers_pose+left_arm_pose]),[duration])
         ready = True
+    play_movement(todicts(head_dofs,[head_default_pose]),[0.5])
     time.sleep(1)
 
 contraid = 1   
@@ -81,9 +82,9 @@ def replay_forward(id, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
     dofs = right_arm_dofs
     postures = right_arm_trajectories[id]
     
-    if mode == ReplayMode.INCONGRUENT:
+    if mode.value == ReplayMode.INCONGRUENT.value:
         head_posture = head_congruent_poses[contraid]
-    elif mode == ReplayMode.NEUTRAL:
+    elif mode.value == ReplayMode.NEUTRAL.value:
         head_posture = head_incongruent_pose
     else:
         head_posture = head_congruent_poses[id]
@@ -92,14 +93,17 @@ def replay_forward(id, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
         perc = percentage/100.0
         postures = postures[:max(1,int(len(postures)*perc))]
 
+    if mode.value == ReplayMode.HEADONLY.value:
+        if ready:
+            park()
+            time.sleep(0.5)
+    
     play_movement(todicts(head_dofs,[head_posture]),[0.5])
 
     n = len(postures)
     durations = [duration/n]*n
     
-    if mode == ReplayMode.HEADONLY:
-        if ready:
-            park()
+    if mode.value == ReplayMode.HEADONLY.value:
         time.sleep(np.sum(durations))
     else:
         if not ready:
@@ -111,9 +115,9 @@ def replay_backward(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, du
     dofs = right_arm_dofs
     postures = right_arm_trajectories[id]
     
-    #if mode == ReplayMode.INCONGRUENT:
+    #if mode.value == ReplayMode.INCONGRUENT.value:
     #    head_posture = head_congruent_poses[contraid]
-    #elif mode == ReplayMode.NEUTRAL:
+    #elif mode.value == ReplayMode.NEUTRAL.value:
     #    head_posture = head_incongruent_pose
     #else:
     #    head_posture = head_congruent_poses[id]
@@ -132,7 +136,7 @@ def replay_backward(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, du
     n = len(postures)
     durations = [duration/n]*n
     
-    if mode == ReplayMode.HEADONLY:
+    if mode.value == ReplayMode.HEADONLY.value:
         time.sleep(np.sum(durations))
         ready = False
     else:
@@ -140,18 +144,31 @@ def replay_backward(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, du
         ready = True
 
     play_movement(todicts(head_dofs,[head_posture]),[0.5])
+    time.sleep(1)
 
 def relax():
-    park()  
+    global ready
+    park()
+    ready = False
     time.sleep(2)
 
 if __name__ == '__main__':
     from beep import beep
 
-    prepare(2)
-    replay_forward(2,mode=ReplayMode.INCONGRUENT,percentage=80) # INCONGRUENT, HEADONLY
-    beep()
-    replay_backward(2,7,mode=ReplayMode.INCONGRUENT,percentage=80)
-    relax()
+    #prepare(2)
+    #replay_forward(2,mode=ReplayMode.INCONGRUENT,percentage=80) # INCONGRUENT, HEADONLY
+    #beep()
+    #replay_backward(2,7,mode=ReplayMode.INCONGRUENT,percentage=80)
+    #relax()
+    
+    #prepare(1,mode=ReplayMode.CONGRUENT)
+    #replay_forward(1,mode=ReplayMode.CONGRUENT,percentage=100)
+    #time.sleep(2)
+    #replay_backward(1,-1,mode=ReplayMode.CONGRUENT,percentage=100)
+    
+    prepare(1,mode=ReplayMode.HEADONLY)
+    replay_forward(2,mode=ReplayMode.HEADONLY)
+    
+    
     
     

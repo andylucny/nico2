@@ -6,10 +6,18 @@ en_dictionary = {
     "@before-demo" : "I am the robot Niko, and in this experiment I always point to some point on the touchscreen, like this:",
     "@after-demo" : "During the experiment, however, I will only do this action partially, and your task will be to guess the point I would touch if I did it in full.",
     "@calibration" : "Now we will calibrate the eye tracker. For calibration, stand up and look downsss at the red point in the middle and corners of the screen. Then sit down and touch the touchscreen.",
-    "@letsgo" : "Let's go on! After each beep, guess the point where robot points and touch it on the screen. You have two seconds to do this.",
+    "@no-calibration" : "Please, sit down and touch the touchscreen, when you are ready.",
+    "@letsgo" : "Let's go on! After each beep, guess the point where I aim to point and touch it on the screen. You have two seconds to do this.",
     "@touch-expired" : "You failed to touch the screen within the time limit, never mind, maybe next time.",
     "@thank-you" : "Thank you.",
     "@done" : "Done.",
+    "@encourage1" : "You are doing great!",
+    "@encourage2" : "You are doing fantastic!",
+    "@encourage3" : "We are on the right track!",
+    "@encourage4" : "Every step you take brings you closer to the goal!",
+    "@encourage5" : "Great, just a little more effort!",
+    "@before-rest" : "Let us take a rest for 15 seconds!",
+    "@after-rest" : "O.K., keep going!",
 }
 
 sk_dictionary = {
@@ -17,10 +25,18 @@ sk_dictionary = {
     "@before-demo" : "Som robot Niko a v tomto experimente vždy ukazujem na nejaký bod na dotykovej obrazovke, napríklad takto:",
     "@after-demo" : "Počas experimentu, však budem robit túto akciu len čiastočne a Vašou úlohou bude hádať bod, ktorého by som sa dotkol, keby som ju vykonal celú.",
     "@calibration" : "Teraz budeme kalibrovať sledovenie pohybu očí. Pri kalibrácii sa postavte a zhora pozerajte vždy na červený bod v strede alebo v rohoch obrazovky a snažte sa, aby sa zmenil na zelený. Po ukončení kalibrácie sa posaďte a svoju pripravenosť začať experiment potvrďte dotykom obrazovky.",
-    "@letsgo" : "Poďme na to! Vždy po zaznení zvukového signálu, dotknite sa obrazovky v mieste, kde odhadujete, že sa chcel dotknúť robot. Máte na to dve sekundy.",
+    "@no-calibration" : "Prosím, sadnite si a svoju pripravenosť potvrďte dotykom obrazovky.",
+    "@letsgo" : "Poďme na to! Vždy po zaznení zvukového signálu, dotknite sa obrazovky v mieste, kde odhadujete, že som sa chcel dotknúť. Máte na to dve sekundy.",
     "@touch-expired" : "Nestihli ste sa dotknúť obrazovky v časovom limite, nevadí, snáď nabudúce.",
     "@thank-you" : "Ďakujem.",
     "@done" : "Hotovo.",
+    "@encourage1" : "Len tak ďalej!",
+    "@encourage2" : "Ide to výborne!",
+    "@encourage3" : "Sme na správnej ceste!",
+    "@encourage4" : "Každý krok nás približuje k cieľu!",
+    "@encourage5" : "Skvelé! Ešte chvíľu a bude to hotové!",
+    "@before-rest" : "Spravme si päťnásť sekundovú prestávku!",
+    "@after-rest" : "Dobre. Pokračujme!",
 }
 
 def translate(language,text):
