@@ -8,6 +8,11 @@ def load_batch(path='batch.txt'):
             rank, id, mode = line.split("\n")[0].split()
             
             try:
+                rank = int(rank)
+            except ValueError:
+                id = 0
+            
+            try:
                 id = int(id)
             except ValueError:
                 id = 1

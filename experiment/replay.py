@@ -41,7 +41,7 @@ contras = {
     7 : [2,4],
 }
 
-from nicomover import enableTorque, play_movement, todicts, move_to_posture, todict, park
+from nicomover import enableTorque, play_movement, todicts, move_to_posture, park
 
 print('motor control started')
 park() # and enable all
@@ -161,13 +161,14 @@ if __name__ == '__main__':
     #replay_backward(2,7,mode=ReplayMode.INCONGRUENT,percentage=80)
     #relax()
     
-    #prepare(1,mode=ReplayMode.CONGRUENT)
-    #replay_forward(1,mode=ReplayMode.CONGRUENT,percentage=100)
-    #time.sleep(2)
-    #replay_backward(1,-1,mode=ReplayMode.CONGRUENT,percentage=100)
+    prepare(1,mode=ReplayMode.CONGRUENT)
+    replay_forward(1,mode=ReplayMode.CONGRUENT,percentage=100)
+    time.sleep(1)
+    replay_backward(1,-1,mode=ReplayMode.CONGRUENT,percentage=100)
+    relax()
     
-    prepare(1,mode=ReplayMode.HEADONLY)
-    replay_forward(2,mode=ReplayMode.HEADONLY)
+    #prepare(1,mode=ReplayMode.HEADONLY)
+    #replay_forward(2,mode=ReplayMode.HEADONLY)
     
     
     

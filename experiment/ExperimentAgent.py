@@ -69,7 +69,7 @@ class ExperimentAgent(Agent):
             prepare(demo,ReplayMode.CONGRUENT)
             replay_forward(demo,mode=ReplayMode.CONGRUENT,percentage=100)
             clean()
-            time.sleep(2)
+            time.sleep(1)
             clean()
             replay_backward(demo,-1,mode=ReplayMode.CONGRUENT,percentage=100)
             clean()
