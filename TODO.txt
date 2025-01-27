@@ -1,0 +1,8 @@
+pri ukazke sa zle hybala hlava
+prvy raz sa zle hybala hlava
+- ale aj tak sa asi koncept s default polohou nepresadi
+ak by sa presadil - po dodani hlavy do defaultnej polohy, pockat 1s
+farbicku na dotyk, nech uzivatel vidi
+povzbudzovanie dari sa nam
+pri detekcii tvare uprednostnovat tu co ma pred sebou (absolutny azimut)
+- zopakovat neuspesne pokusy? (option) - zaradovat v ramci sekcie na koniec
