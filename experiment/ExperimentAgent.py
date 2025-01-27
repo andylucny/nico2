@@ -185,7 +185,7 @@ class ExperimentAgent(Agent):
             touch = space['touch']
             record(name, group, i, one, contra, percentage, mode.value, touch)
             
-            if touch is None and space(default=False)['DoRepeat']:
+            if touch is None and space(default=True)['DoRepeat']:
                 # bubble to the end of the section
                 print('repeating',i)
                 k = j 
@@ -194,7 +194,7 @@ class ExperimentAgent(Agent):
                     k += 1
             else:
                 j += 1
-                if batch[j][-1].value != ReplayMode.END.value and batch[j][-1].value != mode.value and space(default=False)['DoRests']:
+                if batch[j][-1].value != ReplayMode.END.value and batch[j][-1].value != mode.value and space(default=True)['DoRests']:
                     print('rest')
                     speak(f'@encourage{np.random.randint(5)+1}')
                     speak('@before-rest')

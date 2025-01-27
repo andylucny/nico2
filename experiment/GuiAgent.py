@@ -30,8 +30,8 @@ class GuiAgent(Agent):
             [ 
                 sg.Checkbox("Follow face and smile", default=True, key='BodyLanguage', enable_events=True),
                 sg.Checkbox("Tell instructions", default=True, key='TellIstructions', enable_events=True),
-                sg.Checkbox("repeat", default=False, key='DoRepeat', enable_events=True),
-                sg.Checkbox("rests", default=False, key='DoRests', enable_events=True),
+                sg.Checkbox("repeat", default=True, key='DoRepeat', enable_events=True),
+                sg.Checkbox("rests", default=True, key='DoRests', enable_events=True),
             ],
             [
                 sg.Button("Run batch 1", size=(11, 1)),

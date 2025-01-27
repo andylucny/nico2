@@ -16,7 +16,7 @@ en_dictionary = {
     "@encourage3" : "We are on the right track!",
     "@encourage4" : "Every step you take brings you closer to the goal!",
     "@encourage5" : "Great, just a little more effort!",
-    "@before-rest" : "Let us take a rest for 15 seconds!",
+    "@before-rest" : "Let us take a fifteen second break!",
     "@after-rest" : "O.K., keep going!",
 }
 
