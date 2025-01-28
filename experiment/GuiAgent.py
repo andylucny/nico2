@@ -36,6 +36,7 @@ class GuiAgent(Agent):
             [
                 sg.Button("Run batch 1", size=(11, 1)),
                 sg.Button("Run batch 2", size=(11, 1)),
+                sg.Button("Run batch 3", size=(11, 1)),
                 sg.Button("Stop", size=(4, 1)),
                 sg.Button("Exit", size=(7, 1)),
             ],
@@ -116,6 +117,8 @@ class GuiAgent(Agent):
                 space["experiment"] = 2
             elif event == "Run batch 2":
                 space["experiment"] = 3
+            elif event == "Run batch 3":
+                space["experiment"] = 4
             elif event == "Run":
                 space["experiment"] = 1
             elif event == "Stop":
@@ -140,8 +143,15 @@ class GuiAgent(Agent):
             robot_touch_resized = cv.resize(robot_touch,(blank.shape[1],blank.shape[0]))
             cv.putText(robot_touch_resized,str(datetime.now())[:22],(10,robot_touch_resized.shape[0]-15),0,0.7,(255,255,255),1)
             count = space(default=0)["count"]
+            percentage = space(default=0)["percentage"]
             if count > 0:
-                cv.putText(robot_touch_resized,'#'+str(count),(10,28),0,1.0,(255,255,255),1)
+                txt = '#'+str(count)
+                if percentage > 0:
+                    txt += f' {percentage}%'
+                cv.putText(robot_touch_resized,txt,(10,28),0,1.0,(255,255,255),1)
+            b = space(default=0)["break"]
+            if b > 0:
+                cv.putText(robot_touch_resized,str(b),(robot_touch_resized.shape[1]-55,28),0,0.8,(180,180,180),1)
             robot_touchbytes = cv.imencode(".png", robot_touch_resized)[1].tobytes()
             window["touchImage"].update(data=robot_touchbytes)
             
@@ -149,6 +159,7 @@ class GuiAgent(Agent):
             if experimentState != lastExperimentState:
                 window["Run batch 1"].update(disabled=(experimentState>0))
                 window["Run batch 2"].update(disabled=(experimentState>0))
+                window["Run batch 3"].update(disabled=(experimentState>0))
                 window["Run"].update(disabled=(experimentState>0))
                 lastExperimentState = experimentState
 

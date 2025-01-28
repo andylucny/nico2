@@ -89,9 +89,9 @@ def replay_forward(id, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
     else:
         head_posture = head_congruent_poses[id]
     
+    perc = percentage/100.0
     if percentage < 100:
-        perc = percentage/100.0
-        postures = postures[:max(1,int(len(postures)*perc))]
+        postures = postures[:int(len(postures)*perc)]
 
     if mode.value == ReplayMode.HEADONLY.value:
         if ready:
@@ -101,14 +101,14 @@ def replay_forward(id, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
     play_movement(todicts(head_dofs,[head_posture]),[0.5])
 
     n = len(postures)
-    durations = [duration/n]*n
+    durations = [duration*perc/n]*n if n>0 else []
     
-    if mode.value == ReplayMode.HEADONLY.value:
-        time.sleep(np.sum(durations))
-    else:
+    if mode.value != ReplayMode.HEADONLY.value:
         if not ready:
             play_movement(todicts(dofs+right_fingers_dofs+left_arm_dofs,[postures[0]+right_fingers_pose+left_arm_pose]),[duration])
         play_movement(todicts(dofs,postures),durations)
+    else:
+        time.sleep(0.75)
    
 def replay_backward(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
     global ready
@@ -128,16 +128,15 @@ def replay_backward(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, du
     else:
         next_postures = np.copy(postures)
 
+    perc = percentage/100.0
     if percentage < 100:
-        perc = percentage/100.0
         postures = postures[:int(len(postures)*perc)]
         next_postures = next_postures[:int(len(next_postures)*perc)]
 
     n = len(postures)
-    durations = [duration/n]*n
+    durations = [duration/n]*n if n > 0 else []
     
     if mode.value == ReplayMode.HEADONLY.value:
-        time.sleep(np.sum(durations))
         ready = False
     else:
         play_movement(todicts(dofs,blend(postures[::-1],next_postures[::-1])),durations)

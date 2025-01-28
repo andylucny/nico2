@@ -48,7 +48,8 @@ def translate(language,text):
 def speak(text):
     language = space(default='sk')["language"]
     engine = pyttsx3.init()
-    engine.setProperty('rate', 150)
+    rate = 130 #150 # higher means faster
+    engine.setProperty('rate',rate)
     voices = engine.getProperty('voices')
     speaker = 3 if language == 'sk' else 2 # 3 is slovak Filip, 0 is David, 1 Markus, 2 Hazel
     engine.setProperty('voice', voices[speaker].id)
@@ -65,9 +66,10 @@ if __name__ == "__main__":
     from LipsAgent import LipsAgent
     LipsAgent()
     time.sleep(0.5)
-    space["language"] = 'en'
-    speak('preparing, please, wait')
-    print('done')
     space["language"] = 'sk'
-    speak('Thank you.')
-    print('hotovo')
+    speak('@after-demo')
+    #speak('preparing, please, wait')
+    print('done')
+    #space["language"] = 'sk'
+    #speak('@thank-you.')
+    #print('hotovo')

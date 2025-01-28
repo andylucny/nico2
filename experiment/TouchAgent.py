@@ -116,6 +116,7 @@ class TouchAgent(Agent):
                     circle_position = (pos_x, pos_y)
                     print("touch detected at",circle_position)
                     space['touch'] = circle_position
+                    space['reaction'] = time.time()
                     screen.fill((0, 0, 0))
                     #pygame.draw.circle(screen, circle_color, circle_position, circle_radius)
                     cross(screen, circle_color, circle_position, circle_radius, 3)

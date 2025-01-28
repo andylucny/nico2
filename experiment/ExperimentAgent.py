@@ -19,6 +19,8 @@ class ExperimentAgent(Agent):
         self.mouse = None
         space["BodyLanguage"] = True
         space["TellIstructions"] = True
+        space['DoRests'] = True
+        space['DoRepeat'] = True
         space.attach_trigger("experiment",self)
         
     def senseSelectAct(self):
@@ -69,7 +71,7 @@ class ExperimentAgent(Agent):
             prepare(demo,ReplayMode.CONGRUENT)
             replay_forward(demo,mode=ReplayMode.CONGRUENT,percentage=100)
             clean()
-            time.sleep(1)
+            beep()
             clean()
             replay_backward(demo,-1,mode=ReplayMode.CONGRUENT,percentage=100)
             clean()
@@ -82,13 +84,14 @@ class ExperimentAgent(Agent):
             if space["TellIstructions"]:
                 speak("@after-demo")
         
+        initialize_eyetracker()
+        
         if (experiment > 1 or space(default=False)['doCalibration']) and is_eyetracker():
-
+            
             print("calibration")
             if space["TellIstructions"]:
                 speak("@calibration")
                 
-            initialize_eyetracker()
             start_calibration()
             
         else:
@@ -131,22 +134,21 @@ class ExperimentAgent(Agent):
                 
                 batch.append((i+1, id, percentage, mode))
             
-        elif experiment == 2:
+        elif experiment in [2,3,4]:
         
-            batch = load_batch("batch1.txt")
-            group = 1 
-            
-        elif experiment == 3:
-        
-            batch = load_batch("batch2.txt")
-            group = 2
-            
+            group = experiment-1
+            batch = load_batch(f"batch{group}.txt")
+                    
         batch.append((-1, -1, 0, ReplayMode.END))
         batch = np.array(batch)
 
         print("preparing")
         _, one, _, mode = batch[0]
         prepare(one,mode)
+        
+        encourages = [1,2,3,4,5]
+        np.random.shuffle(encourages)
+        encourage = 0
 
         j = 0
         while j < len(batch)-1:
@@ -155,6 +157,13 @@ class ExperimentAgent(Agent):
             _, two, _, _ = batch[j+1]
             
             space['count'] = i
+            space['percentage'] = percentage
+            b = 1
+            k = j 
+            while batch[k][-1].value == batch[k+1][-1].value: # while the same mode
+                k += 1
+                b += 1
+            space['break'] = b
             
             # clean the touchscreen
             clean()
@@ -168,14 +177,14 @@ class ExperimentAgent(Agent):
 
             beep()
             limit = 2.0 #[s]
-            t0 = time.time()
+            timestamp = time.time()
 
             # move backward
             replay_backward(one,two,mode=mode,percentage=percentage)
             
             # confirm
             while space['touch'] is None:
-                if time.time() - t0 > limit:
+                if time.time() - timestamp > limit:
                     fail()
                     if space["TellIstructions"]:
                         speak("@touch-expired")
@@ -183,9 +192,10 @@ class ExperimentAgent(Agent):
                 time.sleep(0.25)
                 
             touch = space['touch']
-            record(name, group, i, one, contra, percentage, mode.value, touch)
+            reaction = space(default=timestamp)['reaction'] - timestamp
+            record(name, group, i, one, contra, percentage, mode.value, touch, reaction, timestamp)
             
-            if touch is None and space(default=True)['DoRepeat']:
+            if touch is None and space['DoRepeat']:
                 # bubble to the end of the section
                 print('repeating',i)
                 k = j 
@@ -194,9 +204,12 @@ class ExperimentAgent(Agent):
                     k += 1
             else:
                 j += 1
-                if batch[j][-1].value != ReplayMode.END.value and batch[j][-1].value != mode.value and space(default=True)['DoRests']:
+                if batch[j][-1].value != ReplayMode.END.value and batch[j][-1].value != mode.value and space['DoRests']:
                     print('rest')
-                    speak(f'@encourage{np.random.randint(5)+1}')
+                    speak(f'@encourage{encourages[encourage]}')
+                    encourage += 1
+                    if encourage == len(encourages):
+                        encourage = 0
                     speak('@before-rest')
                     if space["BodyLanguage"]:
                         print('follow face')
