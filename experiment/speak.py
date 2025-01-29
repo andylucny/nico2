@@ -1,5 +1,11 @@
+import os
 import pyttsx3
+import pygame
+import tempfile
 from agentspace import space
+
+# Initialize pygame mixer
+pygame.mixer.init()
 
 en_dictionary = {
     "@introduction" : "Hello! Thank you for participating in our experiment.",
@@ -54,12 +60,18 @@ def speak(text):
     speaker = 3 if language == 'sk' else 2 # 3 is slovak Filip, 0 is David, 1 Markus, 2 Hazel
     engine.setProperty('voice', voices[speaker].id)
     text = translate(language,text)
-    engine.say(text)
     print('speaking on <'+text+'>')
     space['speaking'] = True
-    engine.runAndWait()
+    temp_filename = "speech.wav"
+    engine.save_to_file(text, temp_filename) # Save the generated speech to a file
+    engine.runAndWait() # generate wav
+    pygame.mixer.Sound(temp_filename).play() # play the wav
+    # Wait until the sound finishes
+    while pygame.mixer.get_busy(): # Check if anything is playing
+        pygame.time.Clock().tick(10) 
     space['speaking'] = False
     print('speaking off')
+    os.remove(temp_filename)
 
 if __name__ == "__main__":
     import time

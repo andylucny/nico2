@@ -1,4 +1,5 @@
 import time
+import numpy as np
 from agentspace import Agent, space
 
 from led import LED
@@ -14,7 +15,7 @@ class LipsAgent(Agent):
         self.led = LED()
         self.last = 'neutral'
         self.led.send_preset(self.last)
-        self.attach_timer(0.25)
+        self.attach_timer(0.2)
     
     def senseSelectAct(self):
         if space(default=False)[self.nameSpeaking]:
@@ -32,6 +33,8 @@ class LipsAgent(Agent):
             elif self.last != 'neutral':
                 self.last = 'neutral'
                 self.led.send_preset(self.last)
+        delay = np.random.uniform(0.0,0.1)
+        time.sleep(delay)
 
 if __name__ == "__main__":
 

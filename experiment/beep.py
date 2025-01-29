@@ -8,7 +8,11 @@ def play(filename, wait=False):
     pygame.mixer.Sound(filename).play()
     # Optionally, you can wait for the sound to finish
     if wait:
-        pygame.time.wait(500)
+        #pygame.time.wait(500)
+        # Wait until the sound finishes
+        while pygame.mixer.get_busy(): # Check if anything is playing
+            pygame.time.Clock().tick(10) 
+
 
 def beep(wait=False):
     play("beep.wav",wait)

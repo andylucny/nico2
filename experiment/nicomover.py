@@ -136,6 +136,31 @@ def play_movement(postures, durations=None):
         time.sleep(duration)
 
 def park():
+    safe = { # standard position for experiment
+        'head_y': 0.0,
+        'head_z': 0.0,
+        'l_arm_x': 8.0,
+        'l_elbow_y': 110.0,
+        'l_indexfinger_x': -180.0,
+        'l_middlefingers_x': -180.0,
+        'l_shoulder_y': 19.0,
+        'l_shoulder_z': -20.0,
+        'l_thumb_x': -180.0,
+        'l_thumb_z': -69.0,
+        'l_wrist_x': -52.0,
+        'l_wrist_z': -13.0,
+        'r_arm_x': 8.0,
+        'r_elbow_y': 110.0,
+        'r_indexfinger_x': -180.0,
+        'r_middlefingers_x': -180.0,
+        'r_shoulder_y': 19.0,
+        'r_shoulder_z': -20.0,
+        'r_thumb_x': -180.0,
+        'r_thumb_z': -69.0,
+        'r_wrist_x': -52.0,
+        'r_wrist_z': -13.0
+    }
+    """
     safe = { # standard position
         'l_shoulder_z':0.0,
         'l_shoulder_y':0.0,
@@ -160,6 +185,7 @@ def park():
         'head_z':0.0,
         'head_y':0.0
     }
+    """
     move_to_posture(safe)
 
 def close():

@@ -9,8 +9,9 @@ from replay import ReplayMode
 
 class GuiAgent(Agent):
       
-    def init(self):
+    def init(self, testing=False):
         #GUI
+        self.testing = testing
         layout = [
             [
                 sg.Image(filename="", key="humanImage"),
@@ -36,30 +37,33 @@ class GuiAgent(Agent):
             [
                 sg.Button("Run batch 1", size=(11, 1)),
                 sg.Button("Run batch 2", size=(11, 1)),
-                sg.Button("Run batch 3", size=(11, 1)),
-                sg.Button("Stop", size=(4, 1)),
+                sg.Button("Run test", size=(10, 1)),
+                sg.Button("Stop", size=(5, 1)),
                 sg.Button("Exit", size=(7, 1)),
             ],
-            [sg.HSeparator()],
-            [
-                sg.Text("Head:", size=(5, 1)), 
-                sg.Radio("congruent", "Head:", True, size=(8, 1), key="Head-congruent", enable_events=True), 
-                sg.Radio("incongruent", "Head:", False, size=(10, 1), key="Head-incongruent", enable_events=True), 
-                sg.Radio("only", "Head:", False, size=(6, 1), key="Head-only", enable_events=True), 
-                sg.Radio("neutral", "Head:", False, size=(8, 1), key="Head-neutral", enable_events=True), 
-            ],
-            [ 
-                sg.Text("Stop mode:", size=(9, 1)), 
-                sg.Radio("at 60%", "StopMode:", False, size=(6, 1), key="StopMode-60", enable_events=True),
-                sg.Radio("at 80%", "StopMode:", True, size=(6, 1), key="StopMode-80", enable_events=True),
-                sg.Radio("at 100%", "StopMode:", False, size=(6, 1), key="StopMode-100", enable_events=True),
-            ],
-            [
-                sg.Checkbox("calibration", default=False, key='DoCalibration', enable_events=True),
-                sg.Checkbox("introduction", default=False, key='DoIntroduction', enable_events=True),
-                sg.Button("Run", size=(3, 1)),
-            ],
         ]
+        if self.testing:
+            layout.append([
+                [sg.HSeparator()],
+                [
+                    sg.Text("Head:", size=(5, 1)), 
+                    sg.Radio("congruent", "Head:", True, size=(8, 1), key="Head-congruent", enable_events=True), 
+                    sg.Radio("incongruent", "Head:", False, size=(10, 1), key="Head-incongruent", enable_events=True), 
+                    sg.Radio("only", "Head:", False, size=(6, 1), key="Head-only", enable_events=True), 
+                    sg.Radio("neutral", "Head:", False, size=(8, 1), key="Head-neutral", enable_events=True), 
+                ],
+                [ 
+                    sg.Text("Stop mode:", size=(9, 1)), 
+                    sg.Radio("at 60%", "StopMode:", False, size=(6, 1), key="StopMode-60", enable_events=True),
+                    sg.Radio("at 80%", "StopMode:", True, size=(6, 1), key="StopMode-80", enable_events=True),
+                    sg.Radio("at 100%", "StopMode:", False, size=(6, 1), key="StopMode-100", enable_events=True),
+                ],
+                [
+                    sg.Checkbox("calibration", default=False, key='DoCalibration', enable_events=True),
+                    sg.Checkbox("introduction", default=False, key='DoIntroduction', enable_events=True),
+                    sg.Button("Run", size=(3, 1)),
+                ],
+            ])
         window = sg.Window("Experiment", layout, finalize=True)
         window.bind("<Return>", "Stop")
         window.move(50,10)
@@ -117,7 +121,7 @@ class GuiAgent(Agent):
                 space["experiment"] = 2
             elif event == "Run batch 2":
                 space["experiment"] = 3
-            elif event == "Run batch 3":
+            elif event == "Run test":
                 space["experiment"] = 4
             elif event == "Run":
                 space["experiment"] = 1
@@ -159,8 +163,9 @@ class GuiAgent(Agent):
             if experimentState != lastExperimentState:
                 window["Run batch 1"].update(disabled=(experimentState>0))
                 window["Run batch 2"].update(disabled=(experimentState>0))
-                window["Run batch 3"].update(disabled=(experimentState>0))
-                window["Run"].update(disabled=(experimentState>0))
+                window["Run test"].update(disabled=(experimentState>0))
+                if self.testing:
+                    window["Run"].update(disabled=(experimentState>0))
                 lastExperimentState = experimentState
 
         window.close()

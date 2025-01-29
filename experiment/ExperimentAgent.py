@@ -4,9 +4,9 @@ import time
 import os
 import random
 from TouchAgent import clean
-from speak import speak
 from replay import prepare, replay_forward, replay_backward, relax, ReplayMode, get_contraid
 from beep import beep, fail
+from speak import speak
 from recording import record, get_point
 from eyetracker import initialize_eyetracker, start_calibration, stop_calibration, start_eyetracker, stop_eyetracker, is_eyetracker
 from batch import load_batch
@@ -194,6 +194,10 @@ class ExperimentAgent(Agent):
 
             # move backward
             replay_backward(one,two,mode=mode,percentage=percentage)
+            
+            # clean the touchscreen
+            clean()
+            print('touchscreen cleaned')
             
             if touch is None and space['DoRepeat']:
                 # bubble to the end of the section
