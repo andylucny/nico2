@@ -133,6 +133,8 @@ def replay_backward(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, du
         postures = postures[:int(len(postures)*perc)]
         next_postures = next_postures[:int(len(next_postures)*perc)]
 
+    play_movement(todicts(head_dofs,[head_posture]),[0.5])
+
     n = len(postures)
     durations = [duration/n]*n if n > 0 else []
     
@@ -142,7 +144,6 @@ def replay_backward(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, du
         play_movement(todicts(dofs,blend(postures[::-1],next_postures[::-1])),durations)
         ready = True
 
-    play_movement(todicts(head_dofs,[head_posture]),[0.5])
     time.sleep(1)
 
 def relax():

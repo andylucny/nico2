@@ -179,9 +179,6 @@ class ExperimentAgent(Agent):
             limit = 2.0 #[s]
             timestamp = time.time()
 
-            # move backward
-            replay_backward(one,two,mode=mode,percentage=percentage)
-            
             # confirm
             while space['touch'] is None:
                 if time.time() - timestamp > limit:
@@ -190,10 +187,13 @@ class ExperimentAgent(Agent):
                         speak("@touch-expired")
                     break
                 time.sleep(0.25)
-                
+
             touch = space['touch']
             reaction = space(default=timestamp)['reaction'] - timestamp
             record(name, group, i, one, contra, percentage, mode.value, touch, reaction, timestamp)
+
+            # move backward
+            replay_backward(one,two,mode=mode,percentage=percentage)
             
             if touch is None and space['DoRepeat']:
                 # bubble to the end of the section
