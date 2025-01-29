@@ -51,14 +51,53 @@ def translate(language,text):
         return dictionary[text]
     return text
     
+def set_voice(engine, language):
+    voices = engine.getProperty('voices')
+    if len(voices) == 0:
+        import platform 
+        if platform.system() == "Windows":
+            print("run Registy Editor (regedit) and")
+            print("export content of Computer\\HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech_OneCore\\Voices\\Tokens into my.reg file" )
+            print("rewrite paths in file to Computer\\HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Speech\\Voices\\Tokens")
+            print("import the my.reg file")
+        else:
+            print("install:")
+            print("$ sudo apt-get install espeak -y")
+        os._exit(0)
+    
+    voice_names = [ voice.name for voice in voices ] 
+    #print(voice_names)
+    
+    if language == 'sk':
+        try:
+            speaker = voice_names.index('Microsoft Filip - Slovak (Slovakia)')
+        except ValueError:
+            try:
+                speaker = voice_names.index('Vocalizer Expressive Laura Harpo 22kHz')
+            except ValueError:
+                speaker = 0
+    
+    else:
+        try:
+            speaker = voice_names.index('Microsoft Zira Desktop - English (United States)')
+        except ValueError:
+            try:
+                speaker = voice_names.index('Microsoft David Desktop - English (United States)')
+            except ValueError:
+                try:
+                    speaker = voice_names.index('english-us')
+                except ValueError:
+                    speaker = 0
+    
+    #print('speaker:',speaker, voices[speaker].name)
+    engine.setProperty('voice', voices[speaker].id)
+    
 def speak(text):
     language = space(default='sk')["language"]
     engine = pyttsx3.init()
     rate = 130 #150 # higher means faster
     engine.setProperty('rate',rate)
-    voices = engine.getProperty('voices')
-    speaker = 3 if language == 'sk' else 2 # 3 is slovak Filip, 0 is David, 1 Markus, 2 Hazel
-    engine.setProperty('voice', voices[speaker].id)
+    set_voice(engine, language)
     text = translate(language,text)
     print('speaking on <'+text+'>')
     space['speaking'] = True

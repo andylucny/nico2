@@ -44,6 +44,8 @@ class ExperimentAgent(Agent):
             for _ in range(20):
                 if space["focused"]:
                     break
+                if self.stopped:
+                    return
                 time.sleep(0.5)
             print('focused')
                 
@@ -52,10 +54,16 @@ class ExperimentAgent(Agent):
             space(validity=2.0)["emotion"] = "happiness"
             time.sleep(2.0)
         
+        if self.stopped:
+            return
+        
         print("introduction")
         if space["TellIstructions"]:
             speak("@introduction")
             
+        if self.stopped:
+            return
+
         if experiment > 1 or space(default=False)['doIntroduction']:
 
             print("introduction")
@@ -69,13 +77,29 @@ class ExperimentAgent(Agent):
                 space["dontLook"] = True
             demo = 1
             prepare(demo,ReplayMode.CONGRUENT)
+
+            if self.stopped:
+                return
+
             replay_forward(demo,mode=ReplayMode.CONGRUENT,percentage=100)
             clean()
+
+            if self.stopped:
+                return
+
             beep()
             clean()
             replay_backward(demo,-1,mode=ReplayMode.CONGRUENT,percentage=100)
             clean()
+
+            if self.stopped:
+                return
+
             relax()
+
+            if self.stopped:
+                return
+
             if space["BodyLanguage"]:
                 print('follow face')
                 space["dontLook"] = None
@@ -84,6 +108,9 @@ class ExperimentAgent(Agent):
             if space["TellIstructions"]:
                 speak("@after-demo")
         
+        if self.stopped:
+            return
+
         initialize_eyetracker()
         
         if (experiment > 1 or space(default=False)['doCalibration']) and is_eyetracker():
@@ -103,6 +130,8 @@ class ExperimentAgent(Agent):
         # confirm
         space['touch'] = None
         while space['touch'] is None:
+            if self.stopped:
+                return
             time.sleep(0.25)
 
         clean()
@@ -113,14 +142,23 @@ class ExperimentAgent(Agent):
         print('eyetracking started')
         start_eyetracker(name)
 
+        if self.stopped:
+            return
+
         if space["TellIstructions"]:
             speak("@letsgo")
             
+        if self.stopped:
+            return
+
         if space["BodyLanguage"]:
             print('face following stopped')
             space["dontLook"] = True
             time.sleep(0.5)
                 
+        if self.stopped:
+            return
+
         print('movement starting')
         
         if experiment == 1:
@@ -142,10 +180,16 @@ class ExperimentAgent(Agent):
         batch.append((-1, -1, 0, ReplayMode.END))
         batch = np.array(batch)
 
+        if self.stopped:
+            return
+
         print("preparing")
         _, one, _, mode = batch[0]
         prepare(one,mode)
         
+        if self.stopped:
+            return
+
         encourages = [1,2,3,4,5]
         np.random.shuffle(encourages)
         encourage = 0
@@ -175,6 +219,9 @@ class ExperimentAgent(Agent):
             space['touch'] = None
             replay_forward(one,mode=mode,percentage=percentage)
 
+            if self.stopped:
+                return
+
             beep()
             limit = 2.0 #[s]
             timestamp = time.time()
@@ -187,6 +234,8 @@ class ExperimentAgent(Agent):
                         speak("@touch-expired")
                     break
                 time.sleep(0.25)
+                if self.stopped:
+                    return
 
             touch = space['touch']
             reaction = space(default=timestamp)['reaction'] - timestamp
@@ -198,6 +247,9 @@ class ExperimentAgent(Agent):
             # clean the touchscreen
             clean()
             print('touchscreen cleaned')
+            
+            if self.stopped:
+                return
             
             if touch is None and space['DoRepeat']:
                 # bubble to the end of the section
@@ -218,21 +270,36 @@ class ExperimentAgent(Agent):
                     if space["BodyLanguage"]:
                         print('follow face')
                         space["dontLook"] = None
-                    time.sleep(15)
+
+                    for _ in range(15):
+                        time.sleep(1)
+                        if self.stopped:
+                            return
+
                     if space["BodyLanguage"]:
                         print('face following stopped')
                         space["dontLook"] = True
                     speak('@after-rest')
         
+        if self.stopped:
+            return
+
         space['count'] = None
         
         if space["TellIstructions"]:
             speak("@thank-you")
                 
+        if self.stopped:
+            return
+
         if space["TellIstructions"]:
             speak("@done")
 
         relax()
+
+        if self.stopped:
+            return
+
         time.sleep(2)
         
         stop_eyetracker()

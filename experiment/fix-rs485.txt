@@ -1,0 +1,1 @@
+Device Manager / Ports (COM & LPT) / USB Serial Port (COM4) / Properties / Port Settings / Advanced / Latency Timer (msec) = 1

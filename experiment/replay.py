@@ -1,6 +1,5 @@
 import time
 import numpy as np
-import threading
 
 right_arm_dofs = ['r_shoulder_z', 'r_shoulder_y', 'r_arm_x', 'r_elbow_y', 'r_wrist_z', 'r_wrist_x', 'r_indexfinger_x']
 right_arm_trajectories = {
@@ -61,18 +60,15 @@ def blend(postures1,postures2):
     return [ list(posture1 * (1-fraction) + posture2 * fraction) for fraction, posture1, posture2 in zip(fractions, np.array(postures1), np.array(postures2)) ]
 
 ready = False # in the start position
-lock = threading.Lock()
 
 def prepare(nextid, mode=ReplayMode.CONGRUENT, duration=2.0):
     global ready
     dofs = right_arm_dofs
     postures = right_arm_trajectories[nextid]
     if mode.value != ReplayMode.HEADONLY.value:
-        with lock:
-            play_movement(todicts(dofs+right_fingers_dofs+left_arm_dofs,[postures[0]+right_fingers_pose+left_arm_pose]),[duration])
+        play_movement(todicts(dofs+right_fingers_dofs+left_arm_dofs,[postures[0]+right_fingers_pose+left_arm_pose]),[duration])
         ready = True
-    with lock:
-        play_movement(todicts(head_dofs,[head_default_pose]),[0.5])
+    play_movement(todicts(head_dofs,[head_default_pose]),[0.5])
     time.sleep(1)
 
 contraid = 1   
@@ -102,18 +98,15 @@ def replay_forward(id, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
             park()
             time.sleep(0.5)
     
-    with lock:
-        play_movement(todicts(head_dofs,[head_posture]),[0.5])
+    play_movement(todicts(head_dofs,[head_posture]),[0.5])
 
     n = len(postures)
     durations = [duration*perc/n]*n if n>0 else []
     
     if mode.value != ReplayMode.HEADONLY.value:
         if not ready:
-            with lock:
-                play_movement(todicts(dofs+right_fingers_dofs+left_arm_dofs,[postures[0]+right_fingers_pose+left_arm_pose]),[duration])
-        with lock:
-            play_movement(todicts(dofs,postures),durations)
+            play_movement(todicts(dofs+right_fingers_dofs+left_arm_dofs,[postures[0]+right_fingers_pose+left_arm_pose]),[duration])
+        play_movement(todicts(dofs,postures),durations)
     else:
         time.sleep(0.75)
    
@@ -140,8 +133,7 @@ def replay_backward(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, du
         postures = postures[:int(len(postures)*perc)]
         next_postures = next_postures[:int(len(next_postures)*perc)]
 
-    with lock:
-        play_movement(todicts(head_dofs,[head_posture]),[0.5])
+    play_movement(todicts(head_dofs,[head_posture]),[0.5])
 
     n = len(postures)
     durations = [duration/n]*n if n > 0 else []
@@ -149,8 +141,7 @@ def replay_backward(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, du
     if mode.value == ReplayMode.HEADONLY.value:
         ready = False
     else:
-        with lock:
-            play_movement(todicts(dofs,blend(postures[::-1],next_postures[::-1])),durations)
+        play_movement(todicts(dofs,blend(postures[::-1],next_postures[::-1])),durations)
         ready = True
 
     time.sleep(1)

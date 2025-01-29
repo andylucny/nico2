@@ -145,6 +145,7 @@ class NicoRobot():
     def getAngle(self, dof):
         id = self.idxs[dof]
         dxl, self.errno, self.result = self.handler.read2ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_PRESENT_POSITION)
+        self.errno, self.result = self.handler.write2ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_GOAL_POSITION, data=dxl)
         degree = dxl_to_degree(dxl,self.models[dof])
         degree = degree * self.directions[dof] - self.offsets[dof]
         return degree

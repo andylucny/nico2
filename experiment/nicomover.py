@@ -129,11 +129,14 @@ def play_movement(postures, durations=None):
     if durations is None:
         durations = [ 1000 ] * len(postures) # default 1s
     for posture, duration in zip(postures, durations):
+        t0 = time.time()
         command = {
             dof : posture[dof] for dof in posture if dof != 'timestamp' 
         }
         move_to_posture_through_time(command, duration)
-        time.sleep(duration)
+        t1 = time.time()
+        elapsed = t1-t0
+        time.sleep(max(0,duration-elapsed))
 
 def park():
     safe = { # standard position for experiment
