@@ -41,7 +41,7 @@ contras = {
     7 : [2,4],
 }
 
-from nicomover import enableTorque, play_movement, todicts, move_to_posture, park
+from nicomover import enableTorque, play_movement, blind_play_movement, todicts, move_to_posture, park
 
 print('motor control started')
 park() # and enable all
@@ -106,7 +106,7 @@ def replay_forward(id, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
     if mode.value != ReplayMode.HEADONLY.value:
         if not ready:
             play_movement(todicts(dofs+right_fingers_dofs+left_arm_dofs,[postures[0]+right_fingers_pose+left_arm_pose]),[duration])
-        play_movement(todicts(dofs,postures),durations)
+        blind_play_movement(todicts(dofs,postures),durations)
     else:
         time.sleep(0.75)
    
@@ -141,7 +141,7 @@ def replay_backward(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, du
     if mode.value == ReplayMode.HEADONLY.value:
         ready = False
     else:
-        play_movement(todicts(dofs,blend(postures[::-1],next_postures[::-1])),durations)
+        blind_play_movement(todicts(dofs,blend(postures[::-1],next_postures[::-1])),durations)
         ready = True
 
     time.sleep(1)

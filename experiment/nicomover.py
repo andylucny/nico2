@@ -120,6 +120,15 @@ def move_to_posture_through_time(target_posture, duration):
     for dof in target_posture:
         setAngle(dof, target_posture[dof], speed_to_reach[dof])
 
+def blind_move_to_posture_through_time(current_posture, target_posture, duration):
+    if duration == 0:
+        return
+    speed_to_reach = {
+        dof: abs(current_posture[dof] - target_posture[dof]) / float(1260*duration) for dof in current_posture
+    }
+    for dof in target_posture:
+        setAngle(dof, target_posture[dof], speed_to_reach[dof])
+
 def play_movement(postures, durations=None):
     if len(postures) == 0:
         return
@@ -129,14 +138,29 @@ def play_movement(postures, durations=None):
     if durations is None:
         durations = [ 1000 ] * len(postures) # default 1s
     for posture, duration in zip(postures, durations):
-        t0 = time.time()
         command = {
             dof : posture[dof] for dof in posture if dof != 'timestamp' 
         }
         move_to_posture_through_time(command, duration)
-        t1 = time.time()
-        elapsed = t1-t0
-        time.sleep(max(0,duration-elapsed))
+        time.sleep(duration)
+
+def blind_play_movement(postures, durations=None):
+    if len(postures) == 0:
+        return
+    if durations is None and 'timestamp' in postures[0]:
+        timestamps = np.array([ posture['timestamp'] for posture in postures ]) / 1000.0
+        durations = [timestamps[0]] + list(timestamps[1:] - timestamps[:-1])
+    if durations is None:
+        durations = [ 1000 ] * len(postures) # default 1s
+    for previous_posture, posture, duration in zip(postures[:-1], postures[1:], durations[1:]):
+        previous_pose = {
+            dof : previous_posture[dof] for dof in previous_posture if dof != 'timestamp' 
+        }
+        pose = {
+            dof : posture[dof] for dof in posture if dof != 'timestamp' 
+        }
+        blind_move_to_posture_through_time(previous_pose, pose, duration)
+        time.sleep(duration)
 
 def park():
     safe = { # standard position for experiment
