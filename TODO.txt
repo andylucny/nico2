@@ -1,0 +1,18 @@
+dal by sa skratit timeout na RS485?
+
+da sa v dynamixel SDK nastavit aby neodpovedal?
+
+clean pocas ukazky
+
+raz sa tvaril ze nestihol casovy limit alwé vzal neskorsiu hodnotu
+
+najprv hlavou do defaultnej polohy az potom ze nestihol?
+zahukat hned, ale hovorit az potom
+
+ked pozera do blba, bodka by nemala byt zlta (mode NEUTRAL)
+
+legenda s farbickami
+
+na zaver pri: Dakujem za ucast v experimente
+
+ -> snad pri dalsom opakovani
