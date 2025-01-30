@@ -142,7 +142,7 @@ def play_movement(postures, durations=None):
             dof : posture[dof] for dof in posture if dof != 'timestamp' 
         }
         move_to_posture_through_time(command, duration)
-        time.sleep(duration)
+        time.sleep(duration+0.05) # bulgarian constant for fluent momevement
 
 def blind_play_movement(postures, durations=None):
     if len(postures) == 0:
