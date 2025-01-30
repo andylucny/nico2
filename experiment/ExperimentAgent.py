@@ -248,7 +248,7 @@ class ExperimentAgent(Agent):
 
             if failed:
                 if space["TellIstructions"]:
-                speak("@touch-expired")
+                    speak("@touch-expired")
                 touch = None
             else:
                 touch = space['touch']

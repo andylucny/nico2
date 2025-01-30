@@ -33,7 +33,7 @@ sk_dictionary = {
     "@calibration" : "Teraz budeme kalibrovať sledovenie pohybu očí. Pri kalibrácii sa postavte a zhora pozerajte vždy na červený bod v strede alebo v rohoch obrazovky a snažte sa, aby sa zmenil na zelený. Po ukončení kalibrácie sa posaďte a svoju pripravenosť začať experiment potvrďte dotykom obrazovky.",
     "@no-calibration" : "Prosím, sadnite si a svoju pripravenosť potvrďte dotykom obrazovky.",
     "@letsgo" : "Poďme na to! Vždy po zaznení zvukového signálu, dotknite sa obrazovky v mieste, kde odhadujete, že som sa chcel dotknúť. Máte na to dve sekundy.",
-    "@touch-expired" : "Nestihli ste sa dotknúť obrazovky v časovom limite, nevadí, snáď sa podarí pri zopakovaní.",
+    "@touch-expired" : "Nestihli ste sa dotknúť obrazovky v časovom limite, nevadí, snáď sa to podarí pri zopakovaní.",
     "@thank-you" : "Ďakujem.",
     "@done" : "Hotovo. Ďakujem za účasť v našom experimente.",
     "@encourage1" : "Len tak ďalej!",
