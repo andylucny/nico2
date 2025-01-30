@@ -12,11 +12,15 @@ class NicoRobot():
     ADDR_MX_GOAL_POSITION       = 30
     ADDR_MX_MOVING_SPEED        = 32
     ADDR_MX_PRESENT_POSITION    = 36
+    ADDR_STATUS_RETURN_LEVEL    = 16  # Protocol 1
     
     # Values
     TORQUE_ENABLE               = 1                             # Value for enabling the torque
     TORQUE_DISABLE              = 0                             # Value for disabling the torque
     DEFAULT_MOVING_SPEED        = 40
+    STATUS_RETURN_NONE          = 0                             # Value for no response from the motor
+    STATUS_RETURN_READ          = 1                             # Value for no response from the motor on WRITE but not READ commands
+    STATUS_RETURN_ALL           = 2                             # Value for no response from the motor on both WRITE and READ commands
 
     # Protocol version
     PROTOCOL_VERSION            = 1
@@ -132,6 +136,7 @@ class NicoRobot():
             'l_indexfinger_x':46,   # open(-180)-close(+180)
             'l_middlefingers_x':47, # open(-180)-close(+180)
         }
+        self.noresponse = set()
     
     def getJointNames(self):
         return self.dofs
@@ -145,7 +150,6 @@ class NicoRobot():
     def getAngle(self, dof):
         id = self.idxs[dof]
         dxl, self.errno, self.result = self.handler.read2ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_PRESENT_POSITION)
-        self.errno, self.result = self.handler.write2ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_GOAL_POSITION, data=dxl)
         degree = dxl_to_degree(dxl,self.models[dof])
         degree = degree * self.directions[dof] - self.offsets[dof]
         return degree
@@ -155,19 +159,45 @@ class NicoRobot():
         speed *= 1000
         if speed != self.speeds[dof]:
             speed_dxl = speed_to_dxl(speed,self.models[dof])
-            self.errno, self.result = self.handler.write2ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_MOVING_SPEED, data=speed_dxl)       
+            if dof in self.noresponse:
+                self.errno, self.result = self.handler.write2ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_MX_MOVING_SPEED, data=speed_dxl)       
+            else:
+                self.errno, self.result = self.handler.write2ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_MOVING_SPEED, data=speed_dxl)       
             self.speeds[dof] = speed
         degree = (degree + self.offsets[dof]) * self.directions[dof] 
         dxl = degree_to_dxl(degree,self.models[dof])
-        self.errno, self.result = self.handler.write2ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_GOAL_POSITION, data=dxl)
+        if dof in self.noresponse:
+            self.errno, self.result = self.handler.write2ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_MX_GOAL_POSITION, data=dxl)
+        else:
+            self.errno, self.result = self.handler.write2ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_GOAL_POSITION, data=dxl)
         
     def enableTorque(self, dof):
         id = self.idxs[dof]
-        self.errno, self.result = self.handler.write1ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_TORQUE_ENABLE, data=self.TORQUE_ENABLE)
+        if dof in self.noresponse:
+            self.errno, self.result = self.handler.write1ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_MX_TORQUE_ENABLE, data=self.TORQUE_ENABLE)
+        else:
+            self.errno, self.result = self.handler.write1ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_TORQUE_ENABLE, data=self.TORQUE_ENABLE)
     
     def disableTorque(self, dof):
         id = self.idxs[dof]
-        self.errno, self.result = self.handler.write1ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_TORQUE_ENABLE, data=self.TORQUE_DISABLE)
+        if dof in self.noresponse:
+            self.errno, self.result = self.handler.write1ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_MX_TORQUE_ENABLE, data=self.TORQUE_DISABLE)
+        else:
+            self.errno, self.result = self.handler.write1ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_TORQUE_ENABLE, data=self.TORQUE_DISABLE)
+        
+    def enableResponse(self, dof):
+        if not (dof in self.noresponse):
+            return
+        id = self.idxs[dof]
+        self.errno, self.result = self.handler.write1ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_STATUS_RETURN_LEVEL, data=self.STATUS_RETURN_READ)
+        self.noresponse.remove(dof)
+    
+    def disableResponse(self, dof):
+        if dof in self.noresponse:
+            return
+        id = self.idxs[dof]
+        self.errno, self.result = self.handler.write1ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_STATUS_RETURN_LEVEL, data=self.STATUS_RETURN_ALL)
+        self.noresponse.add(dof)
     
     def getPalmSensorReading(self, dof):
         return 10.0

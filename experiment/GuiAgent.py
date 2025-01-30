@@ -33,6 +33,10 @@ class GuiAgent(Agent):
                 sg.Checkbox("Tell instructions", default=True, key='TellIstructions', enable_events=True),
                 sg.Checkbox("repeat", default=True, key='DoRepeat', enable_events=True),
                 sg.Checkbox("rests", default=True, key='DoRests', enable_events=True),
+                sg.Push(), 
+                sg.Button("", image_filename="redtouch.png", image_size=(32, 32), border_width=0),
+                sg.Button("", image_filename="greengaze.png", image_size=(32, 32), border_width=0),
+                sg.Button("", image_filename="yellowboth.png", image_size=(32, 32), border_width=0),
             ],
             [
                 sg.Button("Run batch 1", size=(11, 1)),

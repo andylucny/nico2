@@ -27,7 +27,6 @@ except:
     print('simulator ready')
 
 from thread_priority import get_thread_priority, set_thread_priority
-from headlimiter import head_z_limits
 
 def release():
     try:
@@ -64,26 +63,6 @@ def disableTorque(dofs=None):
             robot.disableTorque(dof)
 
 def setAngle(dof, angle, speed=0.04):
-    """
-    if dof == 'head_z':
-        limit_from, limit_to = head_z_limits(getAngle('head_y'))
-        if angle < limit_from:
-            angle = limit_from
-        if angle > limit_to:
-            angle = limit_to
-    if dof == 'head_y':
-        y = getAngle('head_y')
-        z = getAngle('head_z')
-        found = False
-        for _ in range(5):
-            limit_from, limit_to = head_z_limits(angle)
-            if z >= limit_from and z <= limit_to:
-                found = True
-                break
-            angle = 0.75*angle + 0.25*y
-        if not found:
-            return
-    """
     robot.setAngle(dof, float(angle), speed)
 
 def getAngle(dof):
