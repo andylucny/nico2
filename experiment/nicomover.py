@@ -26,8 +26,9 @@ except:
     robot = DummyRobot()
     print('simulator ready')
 
+from thread_priority import get_thread_priority, set_thread_priority
 from headlimiter import head_z_limits
-    
+
 def release():
     try:
         del robot
@@ -63,6 +64,7 @@ def disableTorque(dofs=None):
             robot.disableTorque(dof)
 
 def setAngle(dof, angle, speed=0.04):
+    """
     if dof == 'head_z':
         limit_from, limit_to = head_z_limits(getAngle('head_y'))
         if angle < limit_from:
@@ -81,6 +83,7 @@ def setAngle(dof, angle, speed=0.04):
             angle = 0.75*angle + 0.25*y
         if not found:
             return
+    """
     robot.setAngle(dof, float(angle), speed)
 
 def getAngle(dof):
@@ -142,7 +145,7 @@ def play_movement(postures, durations=None):
             dof : posture[dof] for dof in posture if dof != 'timestamp' 
         }
         move_to_posture_through_time(command, duration)
-        time.sleep(duration+0.05) # bulgarian constant for fluent momevement
+        time.sleep(duration) 
 
 def blind_play_movement(postures, durations=None):
     if len(postures) == 0:
@@ -152,6 +155,8 @@ def blind_play_movement(postures, durations=None):
         durations = [timestamps[0]] + list(timestamps[1:] - timestamps[:-1])
     if durations is None:
         durations = [ 1000 ] * len(postures) # default 1s
+    prio = get_thread_priority()
+    set_thread_priority(prio+1)
     for previous_posture, posture, duration in zip(postures[:-1], postures[1:], durations[1:]):
         previous_pose = {
             dof : previous_posture[dof] for dof in previous_posture if dof != 'timestamp' 
@@ -159,8 +164,13 @@ def blind_play_movement(postures, durations=None):
         pose = {
             dof : posture[dof] for dof in posture if dof != 'timestamp' 
         }
+        t0 = time.time()
         blind_move_to_posture_through_time(previous_pose, pose, duration)
-        time.sleep(duration)
+        t1 = time.time()
+        if t1-t0 > duration:
+            print(f'BAD {t1-t0} > {duration}')
+        time.sleep(max(0,duration-(t1-t0)))
+    set_thread_priority(prio)
 
 def park():
     safe = { # standard position for experiment

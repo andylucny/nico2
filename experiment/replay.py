@@ -160,12 +160,17 @@ if __name__ == '__main__':
     #beep()
     #replay_backward(2,7,mode=ReplayMode.INCONGRUENT,percentage=80)
     #relax()
+ 
+    goal = 6
+    prepare(goal,mode=ReplayMode.HEADONLY)
+    replay_forward(goal,mode=ReplayMode.HEADONLY,percentage=0)
     
-    prepare(1,mode=ReplayMode.CONGRUENT)
-    replay_forward(1,mode=ReplayMode.CONGRUENT,percentage=100)
-    time.sleep(1)
-    replay_backward(1,-1,mode=ReplayMode.CONGRUENT,percentage=100)
-    relax()
+    #goal = 1
+    #prepare(goal,mode=ReplayMode.CONGRUENT)
+    #replay_forward(goal,mode=ReplayMode.CONGRUENT,percentage=90)
+    #time.sleep(1)
+    #replay_backward(goal,-1,mode=ReplayMode.CONGRUENT,percentage=90)
+    #relax()
     
     #prepare(1,mode=ReplayMode.HEADONLY)
     #replay_forward(2,mode=ReplayMode.HEADONLY)
