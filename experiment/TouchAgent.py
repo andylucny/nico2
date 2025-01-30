@@ -12,7 +12,6 @@ def clean():
         pygame.display.flip()
     except:
         pass
-    color_index = 0
     image[:,:] = (80,80,80)
     space['touchimage'] = image
     
@@ -143,13 +142,15 @@ class TouchAgent(Agent):
             emulated = space['emulated']
             if emulated is not None:
                 circle_radius = 30
-                if emulated[0][0] == emulated[1][0] and emulated[0][1] == emulated[1][1]:
+                if len(emulated) >= 2 and emulated[0][0] == emulated[1][0] and emulated[0][1] == emulated[1][1]:
                     circle_positions = emulated[:1]
                     circle_colors = colors[2:]
                 else:
                     circle_positions = emulated
                     circle_colors = colors
                 for circle_position, circle_color in zip(circle_positions,circle_colors):
+                    if circle_position[0] < 0 or circle_position[1] < 0:
+                        continue
                     ##pygame.draw.circle(screen, circle_color, circle_position, circle_radius)
                     #cross(screen, circle_color, circle_position, circle_radius)
                     #pygame.display.flip()

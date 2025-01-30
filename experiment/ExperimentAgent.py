@@ -88,7 +88,9 @@ class ExperimentAgent(Agent):
                 return
 
             beep()
+            time.sleep(0.75)
             clean()
+            
             replay_backward(demo,-1,mode=ReplayMode.CONGRUENT,percentage=100)
             clean()
 
@@ -213,10 +215,11 @@ class ExperimentAgent(Agent):
             clean()
             print('touchscreen cleaned')
 
-            # move forward
+            # red .. touch point, green .. gaze point, yellow .. if both are the same
             contra = one if mode.value != ReplayMode.INCONGRUENT.value else get_contraid(one)
-            space['emulated'] = [ get_point(one), get_point(contra) ]
+            space['emulated'] = [ get_point(one) if mode.value != ReplayMode.HEADONLY.value else (-1.0,-1.0), get_point(contra) if mode.value != ReplayMode.NEUTRAL.value else (-1.0,-1.0) ] 
             space['touch'] = None
+            # move forward
             replay_forward(one,mode=mode,percentage=percentage)
 
             if self.stopped:
@@ -227,23 +230,32 @@ class ExperimentAgent(Agent):
             timestamp = time.time()
 
             # confirm
+            failed = False
             while space['touch'] is None:
                 if time.time() - timestamp > limit:
                     fail()
-                    if space["TellIstructions"]:
-                        speak("@touch-expired")
+                    failed = True
                     break
                 time.sleep(0.25)
                 if self.stopped:
                     return
 
-            touch = space['touch']
-            reaction = space(default=timestamp)['reaction'] - timestamp
-            record(name, group, i, one, contra, percentage, mode.value, touch, reaction, timestamp)
-
             # move backward
             replay_backward(one,two,mode=mode,percentage=percentage)
             
+            if self.stopped:
+                return
+
+            if failed:
+                if space["TellIstructions"]:
+                speak("@touch-expired")
+                touch = None
+            else:
+                touch = space['touch']
+
+            reaction = space(default=timestamp)['reaction'] - timestamp
+            record(name, group, i, one, contra, percentage, mode.value, touch, reaction, timestamp)
+
             # clean the touchscreen
             clean()
             print('touchscreen cleaned')
