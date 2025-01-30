@@ -181,5 +181,5 @@ face
 
 # data files
 *.jpg
-*.png
+#*.png
 *.tif
