@@ -41,9 +41,10 @@ contras = {
     7 : [2,4],
 }
 
-from nicomover import enableTorque, play_movement, blind_play_movement, todicts, move_to_posture, park
+from nicomover import enableTorque, play_movement, blind_play_movement, todicts, move_to_posture, park, half_duplex
 
 print('motor control started')
+half_duplex() # disable motor response
 park() # and enable all
 time.sleep(1)
 

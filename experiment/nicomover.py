@@ -203,6 +203,12 @@ def park():
     }
     """
     move_to_posture(safe)
+    
+def half_duplex(dofs=None):
+    if dofs is None:
+        dofs = robot.getJointNames()
+    for dof is dofs:
+        robot.disableResponse(dof)
 
 def close():
     robot.close()
