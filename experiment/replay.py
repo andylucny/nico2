@@ -44,7 +44,13 @@ contras = {
 from nicomover import enableTorque, play_movement, blind_play_movement, todicts, move_to_posture, park, half_duplex
 
 print('motor control started')
-half_duplex() # disable motor response
+
+######################
+blind = True #False # blind approach means without response from motors
+if blind:
+    half_duplex(right_arm_dofs) # disable motor response
+######################    
+
 park() # and enable all
 time.sleep(1)
 
@@ -107,7 +113,10 @@ def replay_forward(id, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
     if mode.value != ReplayMode.HEADONLY.value:
         if not ready:
             play_movement(todicts(dofs+right_fingers_dofs+left_arm_dofs,[postures[0]+right_fingers_pose+left_arm_pose]),[duration])
-        blind_play_movement(todicts(dofs,postures),durations)
+        if blind:
+            blind_play_movement(todicts(dofs,postures),durations)
+        else:
+            play_movement(todicts(dofs,postures),durations)
     else:
         time.sleep(0.75)
    
@@ -142,7 +151,10 @@ def replay_backward(id, nextid=-1, mode=ReplayMode.CONGRUENT, percentage=100, du
     if mode.value == ReplayMode.HEADONLY.value:
         ready = False
     else:
-        blind_play_movement(todicts(dofs,blend(postures[::-1],next_postures[::-1])),durations)
+        if blind:
+            blind_play_movement(todicts(dofs,blend(postures[::-1],next_postures[::-1])),durations)
+        else:
+            play_movement(todicts(dofs,blend(postures[::-1],next_postures[::-1])),durations)
         ready = True
 
     time.sleep(1)
@@ -162,16 +174,16 @@ if __name__ == '__main__':
     #replay_backward(2,7,mode=ReplayMode.INCONGRUENT,percentage=80)
     #relax()
  
-    goal = 6
-    prepare(goal,mode=ReplayMode.HEADONLY)
-    replay_forward(goal,mode=ReplayMode.HEADONLY,percentage=0)
+    #goal = 6
+    #prepare(goal,mode=ReplayMode.HEADONLY)
+    #replay_forward(goal,mode=ReplayMode.HEADONLY,percentage=0)
     
-    #goal = 1
-    #prepare(goal,mode=ReplayMode.CONGRUENT)
-    #replay_forward(goal,mode=ReplayMode.CONGRUENT,percentage=90)
-    #time.sleep(1)
-    #replay_backward(goal,-1,mode=ReplayMode.CONGRUENT,percentage=90)
-    #relax()
+    goal = 1
+    prepare(goal,mode=ReplayMode.CONGRUENT)
+    replay_forward(goal,mode=ReplayMode.CONGRUENT,percentage=90)
+    time.sleep(1)
+    replay_backward(goal,-1,mode=ReplayMode.CONGRUENT,percentage=90)
+    relax()
     
     #prepare(1,mode=ReplayMode.HEADONLY)
     #replay_forward(2,mode=ReplayMode.HEADONLY)

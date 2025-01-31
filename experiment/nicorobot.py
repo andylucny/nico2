@@ -111,6 +111,7 @@ class NicoRobot():
             print("Succeeded to change the baudrate")
         else:
             print("Failed to change the baudrate")
+        self.port.setPacketTimeoutMillis(8) # [ms]
         self.handler = dynamixel.PacketHandler(protocol_version=self.PROTOCOL_VERSION)
         self.idxs = {
             'head_z':19,            # left(+90)-front(0)-right(-90)
@@ -137,6 +138,7 @@ class NicoRobot():
             'l_middlefingers_x':47, # open(-180)-close(+180)
         }
         self.noresponse = set()
+        self.timeout = 0.0005
     
     def getJointNames(self):
         return self.dofs
@@ -160,28 +162,36 @@ class NicoRobot():
         if speed != self.speeds[dof]:
             speed_dxl = speed_to_dxl(speed,self.models[dof])
             if dof in self.noresponse:
-                self.errno, self.result = self.handler.write2ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_MX_MOVING_SPEED, data=speed_dxl)       
+                self.handler.write2ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_MX_MOVING_SPEED, data=speed_dxl)
+                time.sleep(self.timeout)
+                self.errno, self.result = 0, 0
             else:
                 self.errno, self.result = self.handler.write2ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_MOVING_SPEED, data=speed_dxl)       
             self.speeds[dof] = speed
         degree = (degree + self.offsets[dof]) * self.directions[dof] 
         dxl = degree_to_dxl(degree,self.models[dof])
         if dof in self.noresponse:
-            self.errno, self.result = self.handler.write2ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_MX_GOAL_POSITION, data=dxl)
+            self.handler.write2ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_MX_GOAL_POSITION, data=dxl)
+            time.sleep(self.timeout)
+            self.errno, self.result = 0, 0
         else:
             self.errno, self.result = self.handler.write2ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_GOAL_POSITION, data=dxl)
         
     def enableTorque(self, dof):
         id = self.idxs[dof]
         if dof in self.noresponse:
-            self.errno, self.result = self.handler.write1ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_MX_TORQUE_ENABLE, data=self.TORQUE_ENABLE)
+            self.handler.write1ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_MX_TORQUE_ENABLE, data=self.TORQUE_ENABLE)
+            time.sleep(self.timeout)
+            vself.errno, self.result = 0, 0
         else:
             self.errno, self.result = self.handler.write1ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_TORQUE_ENABLE, data=self.TORQUE_ENABLE)
     
     def disableTorque(self, dof):
         id = self.idxs[dof]
         if dof in self.noresponse:
-            self.errno, self.result = self.handler.write1ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_MX_TORQUE_ENABLE, data=self.TORQUE_DISABLE)
+            self.handler.write1ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_MX_TORQUE_ENABLE, data=self.TORQUE_DISABLE)
+            time.sleep(self.timeout)
+            self.errno, self.result = 0, 0
         else:
             self.errno, self.result = self.handler.write1ByteTxRx(port=self.port, dxl_id=id, address=self.ADDR_MX_TORQUE_ENABLE, data=self.TORQUE_DISABLE)
         
@@ -189,7 +199,9 @@ class NicoRobot():
         if not (dof in self.noresponse):
             return
         id = self.idxs[dof]
-        self.errno, self.result = self.handler.write1ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_STATUS_RETURN_LEVEL, data=self.STATUS_RETURN_READ)
+        self.handler.write1ByteTxOnly(port=self.port, dxl_id=id, address=self.ADDR_STATUS_RETURN_LEVEL, data=self.STATUS_RETURN_READ)
+        time.sleep(self.timeout)
+        self.errno, self.result = 0, 0
         self.noresponse.remove(dof)
     
     def disableResponse(self, dof):

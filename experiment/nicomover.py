@@ -123,7 +123,11 @@ def play_movement(postures, durations=None):
         command = {
             dof : posture[dof] for dof in posture if dof != 'timestamp' 
         }
+        t0 = time.time()
         move_to_posture_through_time(command, duration)
+        t1 = time.time()
+        if t1-t0 > duration:
+            print(f'BAD {t1-t0} > {duration}')
         time.sleep(duration) 
 
 def blind_play_movement(postures, durations=None):
@@ -148,7 +152,7 @@ def blind_play_movement(postures, durations=None):
         t1 = time.time()
         if t1-t0 > duration:
             print(f'BAD {t1-t0} > {duration}')
-        time.sleep(max(0,duration-(t1-t0)))
+        time.sleep(max(0,duration-(t1-t0)+0.01)) #the bulgarian constant is neccessary for fluent movements
     set_thread_priority(prio)
 
 def park():
@@ -207,7 +211,7 @@ def park():
 def half_duplex(dofs=None):
     if dofs is None:
         dofs = robot.getJointNames()
-    for dof is dofs:
+    for dof in dofs:
         robot.disableResponse(dof)
 
 def close():

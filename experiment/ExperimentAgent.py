@@ -75,7 +75,7 @@ class ExperimentAgent(Agent):
             if space["BodyLanguage"]:
                 print('face following stopped')
                 space["dontLook"] = True
-            demo = 1
+            demo = 6 #1
             prepare(demo,ReplayMode.CONGRUENT)
 
             if self.stopped:
