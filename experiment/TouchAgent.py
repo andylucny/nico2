@@ -118,7 +118,7 @@ class TouchAgent(Agent):
                     space['reaction'] = time.time()
                     screen.fill((0, 0, 0))
                     #pygame.draw.circle(screen, circle_color, circle_position, circle_radius)
-                    if space['expected']:
+                    if space(default=False)['expecting']:
                         cross(screen, circle_color, circle_position, circle_radius, 3)
                         pygame.display.flip()
                         cv.circle(image,circle_position,circle_radius,(circle_color[2],circle_color[1],circle_color[0]),cv.FILLED)

@@ -130,12 +130,14 @@ class ExperimentAgent(Agent):
                 speak("@no-calibration")
 
         # confirm
+        space['expecting'] = True
         space['touch'] = None
         while space['touch'] is None:
             if self.stopped:
                 return
             time.sleep(0.25)
 
+        space['expecting'] = None
         clean()
         print('touchscreen cleaned')
         
