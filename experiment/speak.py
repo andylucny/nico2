@@ -27,12 +27,12 @@ en_dictionary = {
 }
 
 sk_dictionary = {
-    "@introduction" : "Dobrý deň! Ďakujeme, že sa zúčastňujte nášho experimentu!",
-    "@before-demo" : "Som robot Niko a v tomto experimente vždy ukazujem na nejaký bod na dotykovej obrazovke, napríklad takto:",
-    "@after-demo" : "Počas experimentu, však budem robit túto akciu len čiastočne a Vašou úlohou bude hádať bod, ktorého by som sa dotkol, keby som ju vykonal celú.",
-    "@calibration" : "Teraz budeme kalibrovať sledovenie pohybu očí. Pri kalibrácii sa postavte a zhora pozerajte vždy na červený bod v strede alebo v rohoch obrazovky a snažte sa, aby sa zmenil na zelený. Po ukončení kalibrácie sa posaďte a svoju pripravenosť začať experiment potvrďte dotykom obrazovky.",
+    "@introduction" : "Dobrý deň! Ďakujeme, že sa zúčastňujete nášho experimentu!",
+    "@before-demo" : "Som robot Niko a v tomto experimente budem opakovane ukazovať na nejaký bod na dotykovej obrazovke, napríklad takto:",
+    "@after-demo" : "Počas experimentu, však budem robit túto akciu len čiastočne a Vašou úlohou bude hádať bod na obrazovke, ktorého by som sa dotkol, keby som ju vykonal celú.",
+    "@calibration" : "Teraz budeme kalibrovať sledovanie pohybu očí. Pri kalibrácii sa postavte a zhora pozerajte vždy na červený bod v strede alebo v rohoch obrazovky a snažte sa, aby sa zmenil na zelený. Po ukončení kalibrácie sa posaďte a svoju pripravenosť začať experiment potvrďte dotykom obrazovky.",
     "@no-calibration" : "Prosím, sadnite si a svoju pripravenosť potvrďte dotykom obrazovky.",
-    "@letsgo" : "Poďme na to! Vždy po zaznení zvukového signálu, dotknite sa obrazovky v mieste, kde odhadujete, že som sa chcel dotknúť. Máte na to dve sekundy.",
+    "@letsgo" : "Poďme na to! Vždy po zaznení zvukového signálu sa dotknite obrazovky v mieste, kde odhadujete, že som sa chcel dotknúť. Máte na to dve sekundy.",
     "@touch-expired" : "Nestihli ste sa dotknúť obrazovky v časovom limite, nevadí, snáď sa to podarí pri zopakovaní.",
     "@thank-you" : "Ďakujem.",
     "@done" : "Hotovo. Ďakujem za účasť v našom experimente.",
