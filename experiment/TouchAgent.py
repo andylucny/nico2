@@ -118,11 +118,12 @@ class TouchAgent(Agent):
                     space['reaction'] = time.time()
                     screen.fill((0, 0, 0))
                     #pygame.draw.circle(screen, circle_color, circle_position, circle_radius)
-                    cross(screen, circle_color, circle_position, circle_radius, 3)
-                    pygame.display.flip()
-                    cv.circle(image,circle_position,circle_radius,(circle_color[2],circle_color[1],circle_color[0]),cv.FILLED)
-                    #cv_cross(image,circle_position,circle_radius,(circle_color[2],circle_color[1],circle_color[0]),7)
-                    space['touchImage'] = image
+                    if space['expected']:
+                        cross(screen, circle_color, circle_position, circle_radius, 3)
+                        pygame.display.flip()
+                        cv.circle(image,circle_position,circle_radius,(circle_color[2],circle_color[1],circle_color[0]),cv.FILLED)
+                        #cv_cross(image,circle_position,circle_radius,(circle_color[2],circle_color[1],circle_color[0]),7)
+                        space['touchImage'] = image
                     #pyautogui.moveTo(mouse[0], mouse[1])
                     #for window in pyautogui.getAllWindows():  
                     #    if "Experiment" in window.title:

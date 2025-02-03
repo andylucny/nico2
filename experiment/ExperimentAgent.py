@@ -218,16 +218,17 @@ class ExperimentAgent(Agent):
             # red .. touch point, green .. gaze point, yellow .. if both are the same
             contra = one if mode.value != ReplayMode.INCONGRUENT.value else get_contraid(one)
             space['emulated'] = [ get_point(one) if mode.value != ReplayMode.HEADONLY.value else (-1.0,-1.0), get_point(contra) if mode.value != ReplayMode.NEUTRAL.value else (-1.0,-1.0) ] 
-            space['touch'] = None
             # move forward
             replay_forward(one,mode=mode,percentage=percentage)
 
             if self.stopped:
                 return
 
-            beep()
             limit = 2.0 #[s]
             timestamp = time.time()
+            space['touch'] = None
+            space(validity=limit)['expecting'] = True
+            beep()
 
             # confirm
             failed = False
@@ -254,7 +255,8 @@ class ExperimentAgent(Agent):
                 touch = space['touch']
 
             reaction = space(default=timestamp)['reaction'] - timestamp
-            record(name, group, i, one, contra, percentage, mode.value, touch, reaction, timestamp)
+            if touch is not None:
+                record(name, group, i, one, contra, percentage, mode.value, touch, reaction, timestamp)
 
             # clean the touchscreen
             clean()
