@@ -31,7 +31,7 @@ class GuiAgent(Agent):
             [ 
                 sg.Checkbox("Follow face and smile", default=True, key='BodyLanguage', enable_events=True),
                 sg.Checkbox("Tell instructions", default=True, key='TellIstructions', enable_events=True),
-                sg.Checkbox("repeat", default=True, key='DoRepeat', enable_events=True),
+                sg.Checkbox("repeat", default=False, key='DoRepeat', enable_events=True),
                 sg.Checkbox("rests", default=True, key='DoRests', enable_events=True),
                 sg.Push(), 
                 sg.Button("", image_filename="redtouch.png", image_size=(32, 32), border_width=0),

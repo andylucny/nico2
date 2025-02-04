@@ -20,7 +20,7 @@ class ExperimentAgent(Agent):
         space["BodyLanguage"] = True
         space["TellIstructions"] = True
         space['DoRests'] = True
-        space['DoRepeat'] = True
+        space['DoRepeat'] = False
         space.attach_trigger("experiment",self)
         
     def senseSelectAct(self):
@@ -251,7 +251,10 @@ class ExperimentAgent(Agent):
 
             if failed:
                 if space["TellIstructions"]:
-                    speak("@touch-expired")
+                    if space["DoRepeat"]:
+                        speak("@touch-expired-repeat")
+                    else:
+                        speak("@touch-expired-discard")
                 touch = None
             else:
                 touch = space['touch']
