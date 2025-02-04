@@ -42,12 +42,12 @@ head_default_pose = [0.0, 0.0]
 #incoherence:
 contras = {
     1 : [3,6],
-    2 : [5,7],
-    3 : [6],
-    4 : [5,7],
-    5 : [2,4],
-    6 : [3],
-    7 : [2,4],
+    2 : [7],
+    3 : [1],
+    4 : [5],
+    5 : [4],
+    6 : [1],
+    7 : [2],
 }
 
 from nicomover import enableTorque, play_movement, blind_play_movement, todicts, move_to_posture, park, half_duplex
@@ -99,7 +99,7 @@ def replay_forward(id, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
     postures = right_arm_trajectories[id]
     
     if mode.value == ReplayMode.INCONGRUENT.value:
-        head_posture = head_congruent_poses[contraid]
+        head_posture = list((np.array(head_congruent_poses[contraid]) + np.array(head_congruent_poses[id])*2)/3)
     elif mode.value == ReplayMode.NEUTRAL.value:
         head_posture = head_incongruent_pose
     else:
