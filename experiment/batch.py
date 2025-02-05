@@ -38,6 +38,7 @@ def load_batch(path='batch.txt'):
 
             batch.append((rank, id, percentage, mode))
 
+    batch.append((-1, -1, 0, ReplayMode.END))
     return np.array(batch)
 
 def shuffle_batch(batch):
@@ -55,7 +56,8 @@ def shuffle_batch(batch):
     #print(np.sum(bunches))
     offset = 0
     for bunch in bunches:
-        np.random.shuffle(batch[offset:offset+bunch])
+        if bunch > 1:
+            np.random.shuffle(batch[offset:offset+bunch])
         offset += bunch
     #print([trial[1] for trial in batch])
     

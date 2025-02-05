@@ -42,8 +42,9 @@ class GuiAgent(Agent):
                 sg.Button("Run batch 1", size=(11, 1)),
                 sg.Button("Run batch 2", size=(11, 1)),
                 sg.Button("Run test", size=(10, 1)),
+                sg.Button("Resume", size=(7, 1), disabled=True),
                 sg.Button("Stop", size=(5, 1)),
-                sg.Button("Exit", size=(7, 1)),
+                sg.Button("Exit", size=(5, 1)),
             ],
         ]
         if self.testing:
@@ -75,6 +76,7 @@ class GuiAgent(Agent):
         #blank = np.zeros((360,480,3),np.uint8)
         ##blank = np.zeros((480,640,3),np.uint8)
         lastExperimentState = 0
+        resume_disabled = True
         while True:
             if self.stopped:
                 break
@@ -129,6 +131,8 @@ class GuiAgent(Agent):
                 space["experiment"] = 4
             elif event == "Run":
                 space["experiment"] = 1
+            elif event == "Resume":
+                space['suspended'] = False
             elif event == "Stop":
                 print("Stop button pressed")
                 break
@@ -171,6 +175,15 @@ class GuiAgent(Agent):
                 if self.testing:
                     window["Run"].update(disabled=(experimentState>0))
                 lastExperimentState = experimentState
+            
+            if space(default=False)['suspended']:
+                if resume_disabled:
+                    resume_disabled = False
+                    window['Resume'].update(disabled=False)
+            else: 
+                if not resume_disabled:
+                    resume_disabled = True
+                    window['Resume'].update(disabled=True)
 
         window.close()
         Agent.stopAll()

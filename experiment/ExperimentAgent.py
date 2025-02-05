@@ -177,14 +177,13 @@ class ExperimentAgent(Agent):
                 mode = space(default=ReplayMode.CONGRUENT)["head"]
                 
                 batch.append((i+1, id, percentage, mode))
+                batch.append((-1, -1, 0, ReplayMode.END))
+                batch = np.array(batch)
             
         elif experiment in [2,3,4]:
         
             group = experiment-1
             batch = load_batch(f"batch{group}.txt")
-                    
-        batch.append((-1, -1, 0, ReplayMode.END))
-        batch = np.array(batch)
 
         if self.stopped:
             return
@@ -257,6 +256,13 @@ class ExperimentAgent(Agent):
                         speak("@touch-expired-repeat")
                     else:
                         speak("@touch-expired-discard")
+                # wait for resuming
+                space['suspended'] = True
+                while space['suspended']:
+                    time.sleep(0.25)
+                    if self.stopped:
+                        return
+
                 touch = None
             else:
                 touch = space['touch']

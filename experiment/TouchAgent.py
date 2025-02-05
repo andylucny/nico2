@@ -16,7 +16,8 @@ def clean():
     space['touchimage'] = image
     
 def cross(scr,line_color,point,radius,thickness=1):
-    x, y = point
+    x, y = point[0]//ratio, point[1]//ratio
+    radius = radius//ratio
     print(f'[{x},{y}]')
     pygame.draw.line(scr,line_color, (x-radius, y), (x+radius, y), width=thickness)
     pygame.draw.line(scr,line_color, (x, y-radius), (x, y+radius), width=thickness)
