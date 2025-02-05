@@ -138,13 +138,15 @@ class ExperimentAgent(Agent):
             time.sleep(0.25)
 
         space['expecting'] = None
-        clean()
-        print('touchscreen cleaned')
         
         stop_calibration()
         
         print('eyetracking started')
         start_eyetracker(name)
+
+        time.sleep(1) # to see cross after the touch
+        clean()
+        print('touchscreen cleaned')
 
         if self.stopped:
             return
