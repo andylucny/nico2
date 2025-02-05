@@ -1,3 +1,4 @@
+import numpy as np
 from replay import ReplayMode
 
 def load_batch(path='batch.txt'):
@@ -37,8 +38,28 @@ def load_batch(path='batch.txt'):
 
             batch.append((rank, id, percentage, mode))
 
-    return batch
+    return np.array(batch)
 
+def shuffle_batch(batch):
+    bunches = []
+    used = set()
+    usedmode = None
+    for _, id, _, mode in batch:
+        if id in used or (usedmode is not None and mode != usedmode):
+            bunches.append(len(used))
+            used.clear()
+        used.add(id)
+        usedmode = mode
+    bunches.append(len(used))
+    #print(bunches)
+    #print(np.sum(bunches))
+    offset = 0
+    for bunch in bunches:
+        np.random.shuffle(batch[offset:offset+bunch])
+        offset += bunch
+    #print([trial[1] for trial in batch])
+    
 if __name__ == '__main__':
-    batch = load_batch()
+    batch = load_batch('batch1.txt')
+    shuffle_batch(batch)
     

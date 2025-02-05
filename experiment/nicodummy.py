@@ -88,12 +88,18 @@ class DummyRobot():
 
     def setAngle(self, dof, angle, speed):
         self.speeds[dof] = speed
-        self.destinations[dof] = angle        
-        
+        self.destinations[dof] = angle    
+
     def enableTorque(self, dof):
         pass
     
     def disableTorque(self, dof):
+        pass
+    
+    def enableResponse(self, dof):
+        pass
+    
+    def disableResponse(self, dof):
         pass
     
     def getPalmSensorReading(self, dof):

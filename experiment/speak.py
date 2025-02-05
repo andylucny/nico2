@@ -8,11 +8,11 @@ from agentspace import space
 pygame.mixer.init()
 
 en_dictionary = {
-    "@introduction" : "Hello! Thank you for participating in our experiment.",
-    "@before-demo" : "I am the robot Niko, and in this experiment I always point to some point on the touchscreen, like this:",
-    "@after-demo" : "During the experiment, however, I will only do this action partially, and your task will be to guess the point I would touch if I did it in full.",
-    "@calibration" : "Now we will calibrate the eye tracker. For calibration, stand up and look downsss at the red point in the middle and corners of the screen. Then sit down and touch the touchscreen.",
-    "@no-calibration" : "Please, sit down and touch the touchscreen, when you are ready.",
+    "@introduction" : "Hello, welcome to our experiment.",
+    "@before-demo" : "We will play several games to recognize my intention or, more simply, you have to guess the point I intend to touch. Now I will show you the whole movement.",
+    "@after-demo" : "During the game, sometimes I will only look at that point, sometimes I will perform only part of the movement with my hand, sometimes I will use both my gaze and my hand. Your goal is to press the touchscreen in front of you at my intended position.",
+    "@calibration" : "Now we will calibrate the eye tracker. For calibration, stand up and look down at the red point in the middle and corners of the screen. When the calibration is concluded, sit down and when you are ready to start, touch the touchscreen.",
+    "@no-calibration" : "Please, sit down and when you are ready to start, touch the touchscreen.",
     "@letsgo" : "Let's go on! After each beep, guess the point I intend to touch and touch it on the screen. You have two seconds to do this.",
     "@touch-expired-repeat" : "You failed to touch the screen within the time limit, never mind, hopefully it will work when repeated.",
     "@touch-expired-discard" : "You failed to touch the screen within the time limit, be careful, you have to provide your response more quickly.",
@@ -28,11 +28,11 @@ en_dictionary = {
 }
 
 sk_dictionary = {
-    "@introduction" : "Dobrý deň! Ďakujeme, že sa zúčastňujete nášho experimentu!",
-    "@before-demo" : "Som robot Niko a v tomto experimente budem opakovane ukazovať na nejaký bod na dotykovej obrazovke, napríklad takto:",
-    "@after-demo" : "Počas experimentu, však budem robit túto akciu len čiastočne a Vašou úlohou bude hádať bod na obrazovke, ktorého by som sa dotkol, keby som ju vykonal celú.",
+    "@introduction" : "Dobrý deň! Vitajte v našom experimente!",
+    "@before-demo" : "Budeme sa hrať niekoľko hier zameraných na odhadovanie môjho úmyslu. Jednoducho povedané: budete hádať bod na dotykovej obrazovke, v ktorom sa jej chystám dotknúť. Teraz vám predvediem celý pohyb.",
+    "@after-demo" : "Počas experimentu, budem niekedy na ten bod iba hľadieť, niekedy vykonám iba časť pohybu rukou, niekedy budem robiť oboje naraz. Vašou úlohou bude dotknúť sa dotykovej obrazovky, ktorá leží pred vami, v mieste, v ktorom sa jej chcem dotknúť ja.",
     "@calibration" : "Teraz budeme kalibrovať sledovanie pohybu očí. Pri kalibrácii sa postavte a zhora pozerajte vždy na červený bod v strede alebo v rohoch obrazovky a snažte sa, aby sa zmenil na zelený. Po ukončení kalibrácie sa posaďte a svoju pripravenosť začať experiment potvrďte dotykom obrazovky.",
-    "@no-calibration" : "Prosím, sadnite si a svoju pripravenosť potvrďte dotykom obrazovky.",
+    "@no-calibration" : "Prosím, sadnite si a keď budete pripravený začať, potvrďte to dotykom obrazovky v ľubovoľnom mieste.",
     "@letsgo" : "Poďme na to! Vždy po zaznení zvukového signálu sa dotknite obrazovky v mieste, kde odhadujete, že som mal úmysel sa dotknúť. Máte na to dve sekundy.",
     "@touch-expired-repeat" : "Nestihli ste sa dotknúť obrazovky v časovom limite, nevadí, snáď sa to podarí pri zopakovaní.",
     "@touch-expired-discard" : "Nestihli ste sa dotknúť obrazovky v časovom limite, sústreďte sa, prosím, musíte reagovať rýchlejšie.",

@@ -99,7 +99,8 @@ def replay_forward(id, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
     postures = right_arm_trajectories[id]
     
     if mode.value == ReplayMode.INCONGRUENT.value:
-        head_posture = list((np.array(head_congruent_poses[contraid]) + np.array(head_congruent_poses[id])*2)/3)
+        cm = 4.5 #3
+        head_posture = list((np.array(head_congruent_poses[contraid])*cm + np.array(head_congruent_poses[id])*(9-cm))/9)
     elif mode.value == ReplayMode.NEUTRAL.value:
         head_posture = head_incongruent_pose
     else:
