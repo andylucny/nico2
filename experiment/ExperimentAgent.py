@@ -298,6 +298,7 @@ class ExperimentAgent(Agent):
                 j += 1
                 if batch[j][-1].value != ReplayMode.END.value and batch[j][-1].value != mode.value and space['DoRests']:
                     print('rest')
+                    space['break'] = 0
                     speak(f'@encourage{encourages[encourage]}')
                     encourage += 1
                     if encourage == len(encourages):
@@ -321,6 +322,10 @@ class ExperimentAgent(Agent):
             return
 
         space['count'] = None
+        space['mode'] = None
+        space['percentage'] = None
+        space['id'] = None
+        space['break'] = 0
                        
         if self.stopped:
             return
