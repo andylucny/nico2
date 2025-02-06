@@ -144,7 +144,7 @@ class ExperimentAgent(Agent):
         print('eyetracking started')
         start_eyetracker(name)
 
-        time.sleep(1) # to see cross after the touch
+        time.sleep(0.6) # to see cross after the touch
         clean()
         print('touchscreen cleaned')
 
@@ -298,6 +298,9 @@ class ExperimentAgent(Agent):
                 j += 1
                 if batch[j][-1].value != ReplayMode.END.value and batch[j][-1].value != mode.value and space['DoRests']:
                     print('rest')
+                    space['mode'] = None
+                    space['percentage'] = None
+                    space['id'] = None
                     space['break'] = 0
                     speak(f'@encourage{encourages[encourage]}')
                     encourage += 1
