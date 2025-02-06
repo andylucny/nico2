@@ -9,7 +9,7 @@ from replay import ReplayMode
 
 class GuiAgent(Agent):
       
-    def init(self, testing=True):
+    def init(self, testing=False):
         #GUI
         self.testing = testing
         layout = [
@@ -154,13 +154,20 @@ class GuiAgent(Agent):
             robot_touch = np.copy(space(default=blank)['touchImage'])
             robot_touch_resized = cv.resize(robot_touch,(blank.shape[1],blank.shape[0]))
             cv.putText(robot_touch_resized,str(datetime.now())[:22],(10,robot_touch_resized.shape[0]-15),0,0.7,(255,255,255),1)
+            txt = ""
             count = space(default=0)["count"]
-            percentage = space(default=0)["percentage"]
             if count > 0:
-                txt = '#'+str(count)
-                if percentage > 0:
-                    txt += f' {percentage}%'
-                cv.putText(robot_touch_resized,txt,(10,28),0,1.0,(255,255,255),1)
+                txt = f'#{count} '
+            mode = space(default=0)["mode"]
+            if mode > 0:
+                txt += ["","GP","I","G","P"][mode]
+            percentage = space(default=0)["percentage"]
+            if percentage > 0:
+                txt += f'{percentage}%'
+            id = space(default=0)["id"]
+            if id > 0:
+                txt += f' {id}'            
+            cv.putText(robot_touch_resized,txt,(10,28),0,1.0,(255,255,255),1)
             b = space(default=0)["break"]
             if b > 0:
                 cv.putText(robot_touch_resized,str(b),(robot_touch_resized.shape[1]-55,28),0,0.8,(180,180,180),1)

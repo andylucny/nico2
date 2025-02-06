@@ -71,12 +71,12 @@ park() # and enable all
 time.sleep(1)
 
 from enum import Enum, auto
-class ReplayMode(Enum):
-    CONGRUENT = auto()   # value 1
-    INCONGRUENT = auto() # value 2
-    HEADONLY = auto()    # value 3
-    NEUTRAL = auto()     # value 4
-    END = auto()         # value 5
+class ReplayMode(Enum): 
+    CONGRUENT = auto()   # value 1 # GP
+    INCONGRUENT = auto() # value 2 # I
+    HEADONLY = auto()    # value 3 # G
+    NEUTRAL = auto()     # value 4 # P
+    END = auto()         # value 5 
 
 def blend(postures1,postures2):
     fractions = np.linspace(0,1,len(postures1))
@@ -208,10 +208,12 @@ if __name__ == '__main__':
     #prepare(1,mode=ReplayMode.HEADONLY)
     #replay_forward(2,mode=ReplayMode.HEADONLY)
     
-    goal = 1
-    prepare(goal,mode=ReplayMode.INCONGRUENT)
-    def g(id,id2,cm=4.5):
-        replay_forward(id,mode=ReplayMode.INCONGRUENT,percentage=80,cm=cm) # INCONGRUENT, HEADONLY
-        beep()
-        replay_backward(id,id2,mode=ReplayMode.INCONGRUENT,percentage=80)
+    #goal = 1
+    #prepare(goal,mode=ReplayMode.INCONGRUENT)
+    #def g(id,id2,cm=4.5):
+    #    replay_forward(id,mode=ReplayMode.INCONGRUENT,percentage=80,cm=cm) # INCONGRUENT, HEADONLY
+    #    beep()
+    #    replay_backward(id,id2,mode=ReplayMode.INCONGRUENT,percentage=80)
+    
+    relax()
     

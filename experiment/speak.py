@@ -16,7 +16,6 @@ en_dictionary = {
     "@letsgo" : "Let's go on! After each beep, guess the point I intend to touch and touch it on the screen. You have two seconds to do this.",
     "@touch-expired-repeat" : "You failed to touch the screen within the time limit, never mind, hopefully it will work when repeated.",
     "@touch-expired-discard" : "You failed to touch the screen within the time limit, be careful, you have to provide your response more quickly.",
-    "@thank-you" : "Thank you.",
     "@done" : "Done. Thank you for your participation in our experiment.",
     "@encourage1" : "You are doing great!",
     "@encourage2" : "You are doing fantastic!",
@@ -30,13 +29,12 @@ en_dictionary = {
 sk_dictionary = {
     "@introduction" : "Dobrý deň! Vitajte v našom experimente!",
     "@before-demo" : "Budeme sa hrať niekoľko hier zameraných na odhadovanie môjho úmyslu. Jednoducho povedané: budete hádať bod na dotykovej obrazovke, v ktorom sa jej chystám dotknúť ja. Teraz vám predvediem celý pohyb.",
-    "@after-demo" : "Počas experimentu, budem niekedy na bod zamýšľaného dotyku iba hľadieť, niekedy vykonám iba časť pohybu rukou, niekedy budem robiť oboje naraz. Vašou úlohou bude dotknúť sa dotykovej obrazovky, v mieste, v ktorom som sa jej chcel dotknúť ja.",
+    "@after-demo" : "Počas experimentu, budem niekedy na bod zamýšľaného dotyku iba hľadieť, niekedy vykonám iba časť pohybu rukou, niekedy budem robiť oboje naraz. Vašou úlohou bude dotknúť sa obrazovky, v mieste, v ktorom som sa jej chcel dotknúť ja.",
     "@calibration" : "Teraz budeme kalibrovať sledovanie pohybu očí. Pri kalibrácii sa postavte a zhora pozerajte vždy na červený bod v strede alebo v rohoch obrazovky a snažte sa, aby sa zmenil na zelený. Po ukončení kalibrácie sa posaďte a svoju pripravenosť začať experiment potvrďte dotykom obrazovky.",
     "@no-calibration" : "Prosím, sadnite si a keď budete pripravený začať, potvrďte to dotykom obrazovky v ľubovoľnom mieste.",
     "@letsgo" : "Poďme na to! Vždy po zaznení zvukového signálu sa dotknite obrazovky v mieste, kde odhadujete, že som mal úmysel sa dotknúť. Máte na to dve sekundy.",
     "@touch-expired-repeat" : "Nestihli ste sa dotknúť obrazovky v časovom limite, nevadí, snáď sa to podarí pri zopakovaní.",
-    "@touch-expired-discard" : "Nestihli ste sa dotknúť obrazovky v časovom limite, sústreďte sa prosím, musíte reagovať rýchlejšie.",
-    "@thank-you" : "Ďakujem.",
+    "@touch-expired-discard" : "Nestihli ste sa dotknúť obrazovky v časovom limite, sústreďte sa prosím, treba reagovať rýchlejšie.",
     "@done" : "Hotovo. Ďakujem za účasť v našom experimente.",
     "@encourage1" : "Len tak ďalej!",
     "@encourage2" : "Ide to výborne!",
@@ -120,9 +118,10 @@ if __name__ == "__main__":
     LipsAgent()
     time.sleep(0.5)
     space["language"] = 'sk'
-    speak('@after-demo')
+    #speak('@after-demo')
     #speak('preparing, please, wait')
-    print('done')
+    #print('done')
     #space["language"] = 'sk'
     #speak('@thank-you.')
     #print('hotovo')
+    

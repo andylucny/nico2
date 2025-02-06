@@ -206,7 +206,9 @@ class ExperimentAgent(Agent):
             _, two, _, _ = batch[j+1]
             
             space['count'] = i
+            space['mode'] = mode.value
             space['percentage'] = percentage
+            space['id'] = one
             b = 1
             k = j 
             while batch[k][-1].value == batch[k+1][-1].value: # while the same mode
@@ -319,10 +321,7 @@ class ExperimentAgent(Agent):
             return
 
         space['count'] = None
-        
-        if space["TellIstructions"]:
-            speak("@thank-you")
-                
+                       
         if self.stopped:
             return
 
