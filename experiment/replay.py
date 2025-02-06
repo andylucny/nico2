@@ -28,13 +28,20 @@ left_arm_pose = [-23.0, 14.0, 0.0, 103.0, -1.0, -55.0, -62.0, -180.0, -179.0, -1
 
 head_dofs = ['head_z', 'head_y']
 head_congruent_poses = {
-    1 : [1.0, -39.0],
-    2 : [7.0, -42.0],
-    3 : [12.0, -38.0],
-    4 : [6.0, -36.0],
-    5 : [-4.0, -36.0],
-    6 : [-11.0, -38.0],
-    7 : [-6.0, -42.0],
+    1 : [1.0, -35.0],
+    2 : [7.0, -40.0],
+    3 : [12.0, -37.0],
+    4 : [6.0, -34.0],
+    5 : [-4.0, -34.0],
+    6 : [-11.0, -35.0],
+    7 : [-6.0, -40.0],
+#    1 : [1.0, -39.0],
+#    2 : [7.0, -42.0],
+#    3 : [12.0, -38.0],
+#    4 : [6.0, -36.0],
+#    5 : [-4.0, -36.0],
+#    6 : [-11.0, -38.0],
+#    7 : [-6.0, -42.0],
 }
 head_incongruent_pose = [0.0, 23.0]
 head_default_pose = [0.0, 0.0]
@@ -94,12 +101,11 @@ def get_contraid(id):
     contraid = contraids[np.random.randint(len(contraids))]
     return contraid
  
-def replay_forward(id, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0):
+def replay_forward(id, mode=ReplayMode.CONGRUENT, percentage=100, duration=2.0, cm=4.5): #3, 6 is too much, 4.5 is ok
     dofs = right_arm_dofs
     postures = right_arm_trajectories[id]
     
     if mode.value == ReplayMode.INCONGRUENT.value:
-        cm = 4.5 #3
         head_posture = list((np.array(head_congruent_poses[contraid])*cm + np.array(head_congruent_poses[id])*(9-cm))/9)
     elif mode.value == ReplayMode.NEUTRAL.value:
         head_posture = head_incongruent_pose
@@ -187,19 +193,25 @@ if __name__ == '__main__':
     #goal = 6
     #prepare(goal,mode=ReplayMode.HEADONLY)
     #replay_forward(goal,mode=ReplayMode.HEADONLY,percentage=0)
+    #def r(goal):
+    #    replay_forward(goal,mode=ReplayMode.HEADONLY,percentage=0)
     
-    goal = 1
-    prepare(goal,mode=ReplayMode.CONGRUENT)
-    for goal in [1,2,3,4,5,6,7]:
-        replay_forward(goal,mode=ReplayMode.CONGRUENT,percentage=100)
-        time.sleep(1)
-        replay_backward(goal,-1,mode=ReplayMode.CONGRUENT,percentage=100)
-        time.sleep(1)
-    relax()
+    #goal = 1
+    #prepare(goal,mode=ReplayMode.CONGRUENT)
+    #for goal in [1,2,3,4,5,6,7]:
+    #    replay_forward(goal,mode=ReplayMode.CONGRUENT,percentage=100)
+    #    time.sleep(1)
+    #    replay_backward(goal,-1,mode=ReplayMode.CONGRUENT,percentage=100)
+    #    time.sleep(1)
+    #relax()
     
     #prepare(1,mode=ReplayMode.HEADONLY)
     #replay_forward(2,mode=ReplayMode.HEADONLY)
     
-    
-    
+    goal = 1
+    prepare(goal,mode=ReplayMode.INCONGRUENT)
+    def g(id,id2,cm=4.5):
+        replay_forward(id,mode=ReplayMode.INCONGRUENT,percentage=80,cm=cm) # INCONGRUENT, HEADONLY
+        beep()
+        replay_backward(id,id2,mode=ReplayMode.INCONGRUENT,percentage=80)
     

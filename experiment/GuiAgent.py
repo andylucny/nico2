@@ -9,7 +9,7 @@ from replay import ReplayMode
 
 class GuiAgent(Agent):
       
-    def init(self, testing=False):
+    def init(self, testing=True):
         #GUI
         self.testing = testing
         layout = [

@@ -257,11 +257,18 @@ class ExperimentAgent(Agent):
                     else:
                         speak("@touch-expired-discard")
                 # wait for resuming
+                print('suspended')
                 space['suspended'] = True
+                if space["BodyLanguage"]:
+                    print('follow face')
+                    space["dontLook"] = None 
                 while space['suspended']:
                     time.sleep(0.25)
                     if self.stopped:
                         return
+                if space["BodyLanguage"]:
+                    print('face following stopped')
+                    space["dontLook"] = True
 
                 touch = None
             else:
