@@ -1,0 +1,2 @@
+The resolution of the display is 2400 x 1350 px
+Its physical dimensions are 46.7 x 26.7 cm
