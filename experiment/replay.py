@@ -232,7 +232,7 @@ if __name__ == '__main__':
     #    replay_backward(id,id2,mode=ReplayMode.INCONGRUENT,percentage=80)
     
     for id in [1,2,3,4,5,6,7]:
-        play_movement(todicts(right_arm_dofs,right_arm_trajectories[id][:1]),[0.5])
+        prepare(id,mode=ReplayMode.CONGRUENT)
         beep()
         time.sleep(1)
     relax()
