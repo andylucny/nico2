@@ -183,3 +183,6 @@ face
 *.jpg
 #*.png
 *.tif
+
+# tools
+import
