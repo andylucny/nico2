@@ -183,6 +183,7 @@ face
 *.jpg
 #*.png
 *.tif
+speech.wav
 
 # tools
 import

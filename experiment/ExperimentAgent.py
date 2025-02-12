@@ -180,7 +180,7 @@ class ExperimentAgent(Agent):
                 batch.append((-1, -1, 0, ReplayMode.END))
                 batch = np.array(batch)
             
-        elif experiment in [2,3,4,5]:
+        elif experiment in [2,3,4,5,6]:
         
             group = experiment-1
             batch = load_batch(f"batch{group}.txt")
