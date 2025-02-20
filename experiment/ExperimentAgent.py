@@ -131,11 +131,13 @@ class ExperimentAgent(Agent):
 
         # confirm
         space['expecting'] = True
-        space['touch'] = None
-        while space['touch'] is None:
-            if self.stopped:
-                return
-            time.sleep(0.25)
+        
+        for _ in range(3):
+            space['touch'] = None
+            while space['touch'] is None:
+                if self.stopped:
+                    return
+                time.sleep(0.1)
 
         space['expecting'] = None
         

@@ -41,8 +41,8 @@ class GuiAgent(Agent):
             [
                 sg.Button("Run batch 1", size=(11, 1)),
                 sg.Button("Run batch 2", size=(11, 1)),
-                sg.Button("Run batch 3", size=(11, 1)),
-                sg.Button("Run batch 4", size=(11, 1)),
+                #sg.Button("Run batch 3", size=(11, 1)),
+                #sg.Button("Run batch 4", size=(11, 1)),
                 sg.Button("Run test", size=(10, 1)),
             ],
             [
@@ -131,10 +131,10 @@ class GuiAgent(Agent):
                 space["experiment"] = 2
             elif event == "Run batch 2":
                 space["experiment"] = 3
-            elif event == "Run batch 3":
-                space["experiment"] = 4
-            elif event == "Run batch 4":
-                space["experiment"] = 5
+            #elif event == "Run batch 3":
+            #    space["experiment"] = 4
+            #elif event == "Run batch 4":
+            #    space["experiment"] = 5
             elif event == "Run test":
                 space["experiment"] = 6
             elif event == "Run":
@@ -186,8 +186,8 @@ class GuiAgent(Agent):
             if experimentState != lastExperimentState:
                 window["Run batch 1"].update(disabled=(experimentState>0))
                 window["Run batch 2"].update(disabled=(experimentState>0))
-                window["Run batch 3"].update(disabled=(experimentState>0))
-                window["Run batch 4"].update(disabled=(experimentState>0))
+                #window["Run batch 3"].update(disabled=(experimentState>0))
+                #window["Run batch 4"].update(disabled=(experimentState>0))
                 window["Run test"].update(disabled=(experimentState>0))
                 if self.testing:
                     window["Run"].update(disabled=(experimentState>0))
