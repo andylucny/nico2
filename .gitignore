@@ -181,7 +181,7 @@ face
 
 # data files
 *.jpg
-#*.png
+err*.png
 *.tif
 speech.wav
 
