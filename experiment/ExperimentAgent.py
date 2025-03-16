@@ -4,7 +4,7 @@ import time
 import os
 import random
 from TouchAgent import clean
-from replay import prepare, replay_forward, replay_backward, relax, ReplayMode, get_contraid
+from replay import prepare, replay_forward, replay_backward, relax, ReplayMode, get_contraid, use_method
 from beep import beep, fail
 from speak import speak
 from recording import record, get_point
@@ -21,12 +21,16 @@ class ExperimentAgent(Agent):
         space["TellIstructions"] = True
         space['DoRests'] = True
         space['DoRepeat'] = False
+        space['method'] = 'blended'
         space.attach_trigger("experiment",self)
         
     def senseSelectAct(self):
         experiment = space(default=0)["experiment"]
         if experiment == 0:
             return
+            
+        print("STARTTING EXPERIMENT")
+        use_method(space(default="blended")["method"]) # how trajectories are obtained
             
         name = space(default='xy')['name']
         print('name',name)

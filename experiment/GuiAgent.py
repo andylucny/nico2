@@ -39,6 +39,11 @@ class GuiAgent(Agent):
                 sg.Button("", image_filename="yellowboth.png", image_size=(32, 32), border_width=0),
             ],
             [
+                sg.Text("Trajectories:", size=(10, 1)), 
+                sg.Radio("blended", "Trajectories:", True, size=(9, 1), key="Trajectories-blended", enable_events=True), 
+                sg.Radio("generated", "Trajectories:", False, size=(9, 1), key="Trajectories-generated", enable_events=True),                 
+            ],
+            [
                 sg.Button("Run batch 1", size=(11, 1)),
                 sg.Button("Run batch 2", size=(11, 1)),
                 #sg.Button("Run batch 3", size=(11, 1)),
@@ -94,6 +99,10 @@ class GuiAgent(Agent):
                 space["language"] = "en"
             elif event == "Language-SK":
                 space["language"] = "sk"
+            elif event == "Trajectories-blended":
+                space["method"] = "blended"
+            elif event == "Trajectories-generated":
+                space["method"] = "generated"
             elif event == "BodyLanguage":
                 bodylang = values["BodyLanguage"]
                 space["BodyLanguage"] = bodylang
