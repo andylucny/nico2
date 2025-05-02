@@ -3,6 +3,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 import sys
+import time
+import numpy as np
 
 class DK(nn.Module):
 
@@ -107,7 +109,7 @@ class IK(nn.Module):
         points, vectors = self.dk(poses) # calculation
         return points, vectors, poses
 
-device = 'cuda'
+device = 'cpu' #'cuda'
 
 # Example usage
 if __name__ == "__main__":
@@ -116,7 +118,7 @@ if __name__ == "__main__":
     model = IK(N,device=device).to(device)
 
     # Example input
-    ind = int(sys.argv[1]) if len(sys.argv[1]) > 1 else 1
+    ind = int(sys.argv[1]) if len(sys.argv) > 1 else 1
     touch_postures = { # new
         1 : [33.0, 39.0, 25.0, 134.0, 102.0, 77.0, -168.0],
         2 : [37.0, 31.0, 23.0, 119.0, 107.0, 113.0, -177.0],
@@ -153,10 +155,11 @@ if __name__ == "__main__":
     # Training loop
     total_epoches = 0
     best_loss = 1e9
+    best_poses = None
+    errs = [1000.0]
     def train(num_epochs = 500):
-        global total_epoches, best_loss
+        global total_epoches, best_loss, best_poses
         for epoch in range(num_epochs):
-            total_loss = 0.0
             optimizer.zero_grad()  # Clear gradients
             points, vectors, poses = model(inputs)  # Forward pass
             loss1 = ((points - goal_points)**2).mean()
@@ -169,18 +172,25 @@ if __name__ == "__main__":
             loss = loss1 + 50*loss2 + 5*loss3 + 100*loss4 + 10*loss5 + 200*loss6 + loss7
             loss.backward()  # Backpropagation
             optimizer.step()  # Update weights
-            total_loss += loss.item()
-
-            print(f"Epoch [{epoch+total_epoches+1}/{total_epoches+num_epochs}], Loss: {total_loss:.4f}")
+            total_loss = loss.item()
+            
+            #print(f"Epoch [{epoch+total_epoches+1}/{total_epoches+num_epochs}], Loss: {total_loss:.4f}")
+            errs.append(total_loss)
+            if total_loss < 10.0 and total_loss > np.median(errs[-10:]):
+                break
             if total_loss < best_loss:
                 best_loss = total_loss
                 if best_loss < 10.0:
-                    save(poses)
+                    best_poses = poses
 
-        total_epoches += num_epochs
+        #print(f'{epoch} epochs')
+        total_epoches += epoch
 
-    train(3000)
-    print("Training completed, best loss:", best_loss)
+    t0 = time.time()
+    train(15000)
+    t1 = time.time()
+    print(f"Training {ind} completed, {total_epoches} epoches, best loss: {best_loss:.4f}, elapsed {t1-t0:.0f}s")
+    save(best_poses)
    
     def test():
         postures = []
