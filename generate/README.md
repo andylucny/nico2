@@ -27,6 +27,8 @@ evaluation and visualization:
 python evaluation.py
 </pre>
 
+![The generated trajectories](trajectories.png)
+
 replay:
 
 <pre>
@@ -34,3 +36,4 @@ cd ..\replay
 python replay.py
 </pre>
 
+[![Watch the teaser video](https://www.youtube.com/watch?v=UIqqin3cJfs/hqdefault.jpg)](https://www.youtube.com/watch?v=UIqqin3cJfs)
