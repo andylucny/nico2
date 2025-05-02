@@ -44,7 +44,7 @@ ax.legend()
 ax.view_init(elev=30, azim=-179)
 plt.rcParams['ps.useafm'] = True
 plt.rcParams['pdf.use14corefonts'] = True
-plt.savefig('trajectories.eps', dpi=300)
+plt.savefig('trajectories.eps', dpi=300, bbox_inches='tight', pad_inches=0)
 plt.clf()
 
 # Plot criterium2.eps
@@ -74,6 +74,8 @@ for ind in keys:
     distances = np.linalg.norm(diffs, axis=1)
     plt.plot(distances, color=colors[ind], label=f'trajectory {ind}')
 
+plt.xlabel('steps') 
+plt.ylabel('error [cm]') 
 plt.legend()
 plt.rcParams['ps.useafm'] = True
 plt.rcParams['pdf.use14corefonts'] = True
