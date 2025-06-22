@@ -1,5 +1,6 @@
 import time
 import numpy as np
+import sys # calling with argument novel or traditional
 
 from nicomover import enableTorque, play_movement, todicts, move_to_posture, todict, park
 print('started')
@@ -38,7 +39,11 @@ for ind in [1,2,3,4,5,6,7]:
     head_posture = head_postures[ind-1]
 
     postures = []
-    with open(f'../generate/generated{ind}.txt','r') as f:
+    trajectory_file = f'../generate/generated{ind}.txt'
+    if len(sys.argv) > 1 and sys.argv[1] == 'traditional':
+        trajectory_file = f'../generate-ikpy/generated-ik{ind}.txt'
+    
+    with open(trajectory_file,'r') as f:
         lines = f.readlines()
         dofs = eval(lines[0])
         for line in lines[1:]:
@@ -52,13 +57,12 @@ for ind in [1,2,3,4,5,6,7]:
     if previous_postures:
         play_movement(todicts(dofs,blend(previous_postures[::-1],postures[::-1])),durations)
         time.sleep(3)
-        #skap
     else:
         enableTorque(dofs+finger_dofs+left_arm_dofs)
         play_movement(todicts(dofs+finger_dofs+left_arm_dofs,[postures[0]+finger_values+left_arm_values]),[duration])
         time.sleep(1)
 
-    #play_movement(todicts(head_dofs,[head_posture]),[0.5])
+    play_movement(todicts(head_dofs,[head_posture]),[0.5])
 
     n = len(postures)
     durations = [duration/n]*n

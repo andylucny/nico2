@@ -26,6 +26,7 @@ class NicoSimulator:
         self.urdf_model = URDF.load(urdf_path)
         self.values = {}
         self.thread = threading.Thread(name="agent", target=self.run)
+        self.thread.daemon = True
         self.thread.start()
         
     def joint_names(self):
