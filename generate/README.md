@@ -37,3 +37,10 @@ python replay.py
 </pre>
 
 [![Watch the teaser video](https://www.youtube.com/watch?v=UIqqin3cJfs/hqdefault.jpg)](https://www.youtube.com/watch?v=UIqqin3cJfs)
+
+
+See also [comparison to the classic IK](https://github.com/andylucny/nico2/tree/main/generate-ikpy) -
+[![watch video](https://www.youtube.com/watch?v=PnguzMA5pDo/hqdefault.jpg)](https://www.youtube.com/watch?v=PnguzMA5pDo)
+
+See also [other project based on this novel method](https://github.com/andylucny/nico2/tree/main/generate-letters) -
+[![watch video](https://www.youtube.com/watch?v=PsnmP7Kvx8g/hqdefault.jpg)](https://www.youtube.com/watch?v=PsnmP7Kvx8g)
