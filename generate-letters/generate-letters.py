@@ -137,7 +137,7 @@ if __name__ == "__main__":
     dy = 0
     goal_points = []
     for y, z in P:
-        goal_points.append([x,y-dy,z-dz])
+        goal_points.append([x,y-dy,z+sz-dz])
 
     goal_vector = torch.tensor([[-1.0,0,0]]).to(device) #start_vector
     normalized_goal_vector = (goal_vector / goal_vector.norm()).to(device)
